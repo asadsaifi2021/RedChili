@@ -104,21 +104,24 @@ export function Guest({ lang }: { lang: Lang }) {
     } finally { setBusy(false); }
   }
 
-  return <main>
+  return <main className="guest-menu">
     <section className={table ? 'hero compact' : 'hero'}>
       <div className="shell hero-inner">
-        <div><div className="kicker">{t('مشويات على الفحم', 'Charcoal grills')}</div>
+        <div className="hero-copy">
+          {!table && <div className="kicker">{t('مشويات على الفحم', 'Charcoal grills')}</div>}
           <h1>{table ? t(`طاولة ${table}`, `Table ${table}`) : t('قائمة رد تشيلي', 'The RedChili menu')}</h1>
           <p>{table ? t('اختر أطباقك وأرسل طلبك إلى الكاشير.', 'Choose your dishes and send your order to the cashier.')
-            : t('تصفّح القائمة. للطلب، امسح رمز QR على طاولتك.', 'Explore the menu. To order, scan the QR code on your table.')}</p>
+            : t('للطلب، امسح رمز QR الموجود على طاولتك.', 'To order, scan the QR code on your table.')}</p>
+          {!table && <a className="hero-link" href="#menu">{t('تصفّح القائمة', 'Explore the menu')} <span aria-hidden="true">↓</span></a>}
         </div>
-        {!table && <img src="/images/dish-03.webp" alt={t('تكة بحرينية مشوية', 'Charcoal grilled Bahraini tikka')} />}
+        {!table && <figure className="hero-photo"><img src="/images/dish-03.webp" fetchPriority="high" alt={t('تكة بحرينية مشوية', 'Charcoal grilled Bahraini tikka')} />
+          <figcaption>{t('تكة بحرينية', 'Bahraini tikka')}</figcaption></figure>}
       </div>
     </section>
-    <div className="shell menu-shell">
+    <div className="shell menu-shell" id="menu">
       {token && !table && loaded && <p role="status" className="notice">{db ? t('إذا لم تظهر طاولتك، امسح رمزها مجدداً.', 'If your table does not appear, scan its QR code again.') : t('الطلب غير متاح في معاينة القائمة.', 'Ordering is unavailable in this menu preview.')}</p>}
       <div className="menu-tools">
-        <input type="search" aria-label={t('ابحث في القائمة', 'Search menu')} placeholder={t('ابحث عن طبق', 'Search dishes')} value={query} onChange={event => setQuery(event.target.value)} />
+        <div className="menu-search"><span aria-hidden="true" /><input type="search" aria-label={t('ابحث في القائمة', 'Search menu')} placeholder={t('ابحث عن طبق', 'Search dishes')} value={query} onChange={event => setQuery(event.target.value)} /></div>
         <nav aria-label={t('الأقسام', 'Categories')} className="chips">{[{ id: '', name: { ar: 'كل القائمة', en: 'Full menu' } }, ...groups].map(group =>
           <button className={category === group.id ? 'active' : ''} key={group.id} aria-pressed={category === group.id} onClick={() => setCategory(group.id)}>{group.name[lang]}</button>)}</nav>
       </div>
@@ -132,9 +135,9 @@ export function Guest({ lang }: { lang: Lang }) {
             const line = cart.find(row => row.id === item.id);
             setQuantity(line?.quantity ?? 1); setNote(line?.note ?? ''); setDetail(item);
           }}>
-            {photo(item.photo) ? <img loading="lazy" src={photo(item.photo)} alt="" /> : <div className="dish-placeholder" />}
-            <div className="dish-copy"><h3>{name(item, lang)}</h3><p>{item[`description_${lang}`]}</p>
-              <div><strong>{money(item.price, lang)}</strong>{!item.available && <span>{t('غير متاح', 'Sold out')}</span>}</div>
+            <div className="dish-media">{photo(item.photo) ? <img loading="lazy" src={photo(item.photo)} alt="" /> : <div className="dish-placeholder" />}</div>
+            <div className="dish-copy"><h3>{name(item, lang)}</h3>{item[`description_${lang}`] && <p>{item[`description_${lang}`]}</p>}
+              <div className="dish-meta"><strong>{money(item.price, lang)}</strong>{!item.available && <span className="sold-out">{t('غير متاح', 'Sold out')}</span>}<span className="dish-arrow" aria-hidden="true">{lang === 'ar' ? '↖' : '↗'}</span></div>
             </div>
           </button>)}</div></section>;
       })}
