@@ -3,5 +3,6 @@ dist/
 .env*
 !.env.example
 .wrangler/
+.netlify/
 .supabase/
 supabase/.temp/
