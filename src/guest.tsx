@@ -21,9 +21,12 @@ function Quantity({ value, change, lang }: { value: number; change: (value: numb
 const token = new URLSearchParams(location.search).get('table');
 const cartKey = `redchili-cart:${token ?? 'menu'}`;
 const pendingKey = `redchili-pending:${token ?? 'menu'}`;
+const receiptKey = `redchili-receipt:${token ?? 'menu'}`;
 const signatureIds = ['dish-3', 'dish-7', 'dish-12'];
 const galleryIds = ['dish-14', 'dish-23', 'dish-21', 'dish-37'];
 type Pending = { key: string; lines: Pick<Line, 'id' | 'price' | 'quantity' | 'note'>[] };
+type Receipt = { key: string; number: number };
+type ReceiptDetails = { number: number; table_label: string; items: Line[]; total: number; status: 'received' | 'kitchen' | 'paid' | 'cancelled' };
 function read<T>(key: string, fallback: T): T {
   try { return JSON.parse(localStorage.getItem(key) ?? 'null') ?? fallback; } catch { return fallback; }
 }
@@ -45,7 +48,10 @@ export function Guest({ lang }: { lang: Lang }) {
   const [confirmed, setConfirmed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const [order, setOrder] = useState<number | null>(null);
+  const [receipt, setReceipt] = useState<Receipt | null>(() => read(receiptKey, null));
+  const [receiptOpen, setReceiptOpen] = useState(false);
+  const [receiptDetails, setReceiptDetails] = useState<ReceiptDetails | null>(null);
+  const [receiptUnavailable, setReceiptUnavailable] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -57,6 +63,21 @@ export function Guest({ lang }: { lang: Lang }) {
     return () => { alive = false; };
   }, []);
   useEffect(() => { localStorage.setItem(cartKey, JSON.stringify(cart)); }, [cart]);
+  useEffect(() => {
+    const client = db;
+    if (!client || !token || !receipt || !receiptOpen) return;
+    const params = { p_token: token, p_key: receipt.key };
+    let active = true;
+    const refresh = async () => {
+      const { data, error: failure } = await client.rpc('guest_receipt', params);
+      if (!active) return;
+      setReceiptUnavailable(Boolean(failure || !data));
+      if (data) setReceiptDetails(data as ReceiptDetails);
+    };
+    void refresh();
+    const timer = window.setInterval(() => void refresh(), 15000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [receipt, receiptOpen]);
 
   const count = cart.reduce((sum, item) => sum + item.quantity, 0);
   const matching = menu.filter(item => (!category || category === item.category) &&
@@ -108,7 +129,14 @@ export function Guest({ lang }: { lang: Lang }) {
         setError(failure.message);
         return;
       }
-      setOrder(Number(data));
+      const savedReceipt = { number: Number(data), key: attempt.key };
+      localStorage.setItem(receiptKey, JSON.stringify(savedReceipt));
+      setReceiptDetails(null);
+      setReceiptUnavailable(false);
+      setReceipt(savedReceipt);
+      setCartOpen(false);
+      setReceiptOpen(true);
+      setConfirmed(false);
       setCart([]);
       localStorage.removeItem(pendingKey);
       setPending(null);
@@ -139,7 +167,8 @@ export function Guest({ lang }: { lang: Lang }) {
         </button>)}</div>
       </>}
     </section>}
-    <div className="shell menu-shell" id="menu" tabIndex={-1}>
+    <div className={table ? 'shell menu-shell ordering-layout' : 'shell menu-shell'} id="menu" tabIndex={-1}>
+      <div className="menu-content">
       {token === null && <h2 className="menu-title">{t('القائمة', 'The menu')}</h2>}
       {token && !table && loaded && <p role="status" className="notice">{db ? t('إذا لم تظهر طاولتك، امسح رمزها مجدداً.', 'If your table does not appear, scan its QR code again.') : t('الطلب غير متاح في معاينة القائمة.', 'Ordering is unavailable in this menu preview.')}</p>}
       <div className="menu-tools">
@@ -160,6 +189,17 @@ export function Guest({ lang }: { lang: Lang }) {
             </div>
           </button>)}</div></section>;
       })}
+      </div>
+      {table && <aside className="order-sidebar" aria-label={t('سلتك', 'Your cart')}>
+        <h2>{t('سلتك', 'Your cart')}</h2>
+        {!cart.length && !pending && <p>{t('اختر طبقًا لإضافته إلى سلتك.', 'Choose a dish to add it to your cart.')}</p>}
+        {cart.length > 0 && <ul>{cart.map(line => <li key={line.id}><span>{line.quantity} × {name(line, lang)}</span><strong>{money(line.quantity * line.price, lang)}</strong></li>)}</ul>}
+        {(count > 0 || pending) && <>
+          <div className="bill"><strong>{t('الإجمالي', 'Total')}</strong><strong>{money(total(cart), lang)}</strong></div>
+          <button className="primary full" onClick={() => setCartOpen(true)}>{t('راجع السلة', 'Review cart')}</button>
+        </>}
+        {receipt && <button className="outline full" onClick={() => setReceiptOpen(true)}>{t('آخر طلب', 'Last order')} #{receipt.number}</button>}
+      </aside>}
     </div>
     {token === null && <section className="gallery" id="gallery">
       {gallery.length > 0 && <div className="shell">
@@ -169,8 +209,11 @@ export function Guest({ lang }: { lang: Lang }) {
         </button>)}</div>
       </div>}
     </section>}
-    {table && (count > 0 || pending) && <aside className="cart-dock"><button className="primary" onClick={() => { setCartOpen(true); setOrder(null); }}>
-      {t('عرض السلة', 'View cart')} · {count} <span>{money(total(cart), lang)}</span></button></aside>}
+    {table && (count > 0 || pending || receipt) && <aside className="cart-dock">
+      {(count > 0 || pending) && <button className="primary" onClick={() => setCartOpen(true)}>
+        {t('عرض السلة', 'View cart')} · {count} <span>{money(total(cart), lang)}</span></button>}
+      {receipt && <button className="outline" onClick={() => setReceiptOpen(true)}>{t('آخر طلب', 'Last order')} #{receipt.number}</button>}
+    </aside>}
     {detail && <Dialog label={t('إغلاق تفاصيل الطبق', 'Close dish details')} close={() => setDetail(null)}>
       {photo(detail.photo) && <img className="detail-image" src={photo(detail.photo)} alt={name(detail, lang)} />}
       <h2>{name(detail, lang)}</h2><p>{detail[`description_${lang}`]}</p>
@@ -182,20 +225,36 @@ export function Guest({ lang }: { lang: Lang }) {
           <button className="primary" onClick={add}>{cart.some(line => line.id === detail.id) ? t('تحديث السلة', 'Update cart') : t('أضف للسلة', 'Add to cart')} · {money(quantity * detail.price, lang)}</button></div></>}
     </Dialog>}
     {cartOpen && <Dialog label={t('إغلاق السلة', 'Close cart')} close={() => { if (!busy) setCartOpen(false); }}>
-      {order !== null ? <div className="success"><h2>{t('تم إرسال طلبك', 'Order received')}</h2><strong dir="ltr">#{order}</strong>
-        <p>{t(`طاولة ${table} · ادفع عند الكاشير`, `Table ${table} · Pay at the cashier`)}</p>
-        <button className="primary" onClick={() => setCartOpen(false)}>{t('العودة للقائمة', 'Back to menu')}</button></div> : <>
         <h2>{t('سلتك', 'Your cart')}</h2>
-        {cart.map(line => <div className="cart-line" key={line.id}><div><strong>{name(line, lang)}</strong><small>{line.note}</small><small>{money(line.quantity * line.price, lang)}</small></div>
+        {cart.map(line => <div className="cart-line" key={line.id}><div><strong>{name(line, lang)}</strong><small>{money(line.quantity * line.price, lang)}</small></div>
           {!pending && <><Quantity value={line.quantity} lang={lang} change={value => setCart(cart.map(row => row.id === line.id ? { ...row, quantity: value } : row))} />
-            <button className="plain" onClick={() => setCart(cart.filter(row => row.id !== line.id))}>{t('حذف', 'Remove')}</button></>}</div>)}
+            <button className="plain" onClick={() => setCart(cart.filter(row => row.id !== line.id))}>{t('حذف', 'Remove')}</button>
+            <label className="cart-note">{t('ملاحظات للمطبخ', 'Kitchen notes')} · {name(line, lang)}
+              <input maxLength={240} value={line.note} onChange={event => setCart(cart.map(row => row.id === line.id ? { ...row, note: event.target.value } : row))} />
+            </label></>}
+          {pending && line.note && <small>{line.note}</small>}
+        </div>)}
         <div className="bill"><strong>{t('الإجمالي', 'Total')}</strong><strong>{money(total(cart), lang)}</strong></div>
         {!pending && <label className="checkbox"><input type="checkbox" checked={confirmed} onChange={event => setConfirmed(event.target.checked)} />
           {t(`أؤكد أنني في طاولة ${table}`, `I confirm I am at table ${table}`)}</label>}
         {error && <p className="notice" role="alert">{orderError(error, lang)}</p>}
         <button className="primary full" disabled={busy || (!pending && (!confirmed || !cart.length))} onClick={() => void submit()}>
           {busy ? t('جارٍ الإرسال…', 'Sending…') : pending ? t('تحقق من الطلب وأعد المحاولة', 'Check and retry order') : t('أرسل الطلب · الدفع عند الكاشير', 'Place order · Pay at cashier')}</button>
+    </Dialog>}
+    {receiptOpen && receipt && <Dialog label={t('إغلاق تفاصيل الطلب', 'Close order receipt')} close={() => setReceiptOpen(false)}>
+      <div className="success"><h2>{t('طلبك', 'Your order')}</h2><strong dir="ltr">#{receipt.number}</strong>
+        <p>{t('طاولة', 'Table')} {receiptDetails?.table_label ?? table}</p>
+        <p role="status">{receiptUnavailable ? t('تعذر تحديث حالة الطلب الآن.', 'Order status is temporarily unavailable.') :
+          receiptDetails?.status === 'paid' ? t('تم الدفع', 'Paid') :
+          receiptDetails?.status === 'cancelled' ? t('تم إلغاء الطلب', 'Order cancelled') :
+          receiptDetails?.status === 'kitchen' ? t('تذكرة المطبخ جاهزة · الدفع عند الكاشير', 'Kitchen ticket prepared · Pay at the cashier') :
+          t('تم استلام الطلب · الدفع عند الكاشير', 'Order received · Pay at the cashier')}</p>
+      </div>
+      {receiptDetails && <>
+        <ul className="receipt-lines">{receiptDetails.items.map(line => <li key={line.id}>{line.quantity} × {name(line, lang)}</li>)}</ul>
+        <div className="bill"><strong>{t('الإجمالي', 'Total')}</strong><strong>{money(receiptDetails.total, lang)}</strong></div>
       </>}
+      <button className="primary full" onClick={() => setReceiptOpen(false)}>{t('العودة للقائمة', 'Back to menu')}</button>
     </Dialog>}
   </main>;
 }

@@ -20,6 +20,7 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
       create publication supabase_realtime;
     `);
     await db.exec(readFileSync('supabase/migrations/202611110001_ordering.sql','utf8'));
+    await db.exec(readFileSync('supabase/migrations/202611110002_guest_receipt.sql','utf8'));
     await db.exec(readFileSync('supabase/seed.sql','utf8'));
     const cashier = randomUUID(), admin = randomUUID();
     await db.query('insert into auth.users values ($1),($2)', [cashier, admin]);
@@ -36,6 +37,10 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     await assert.rejects(submit(request, lines, randomUUID()), /invalid_table/);
     await assert.rejects(submit(request, lines.replace('4400','1')), /price_changed/);
     const { rows: [first] } = await submit(request);
+    const receipt = async (token, key) => (await db.query('select public.guest_receipt($1,$2) as receipt', [token, key])).rows[0].receipt;
+    assert.equal((await receipt(table.token, request)).status, 'received');
+    assert.equal(await receipt(table.token, randomUUID()), null);
+    assert.equal(await receipt(randomUUID(), request), null);
     assert.deepEqual((await submit(request)).rows, [first]);
     await assert.rejects(submit(request, lines.replace('"quantity":2','"quantity":3')), /invalid_request/);
     await submit(randomUUID());
@@ -58,11 +63,17 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     const { rows: [updated] } = await db.query('select * from public.orders where id=$1', [id]);
     assert.equal(updated.total, 13200);
     assert.equal(updated.printed_revision, 2);
+    assert.equal((await receipt(table.token, request)).status, 'kitchen');
     await assert.rejects(db.query("select public.pay_table($1,$2,'card')", [table.id, '{}']), /bill_changed/);
     const bill = JSON.stringify({ [id]: 2, [orders[1].id]: 1 });
     await db.query("select public.pay_table($1,$2,'card')", [table.id, bill]);
     const { rows: paid } = await db.query('select * from public.orders');
     assert.ok(paid.every(order => order.paid_at && order.paid_by === cashier && order.payment_batch === paid[0].payment_batch));
     assert.deepEqual((await db.query('select action from public.order_events order by id')).rows.map(row => row.action), ['edit','print','paid','paid']);
+    await db.exec('reset role; set role anon');
+    const paidReceipt = await receipt(table.token, request);
+    assert.equal(paidReceipt.status, 'paid');
+    assert.equal(paidReceipt.total, 13200);
+    assert.deepEqual(Object.keys(paidReceipt).sort(), ['items', 'number', 'status', 'table_label', 'total']);
   } finally { await db.close(); }
 });
