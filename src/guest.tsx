@@ -19,7 +19,8 @@ function Quantity({ value, change, lang }: { value: number; change: (value: numb
 }
 
 const token = new URLSearchParams(location.search).get('table');
-const cartKey = `redchili-cart:${token ?? 'menu'}`;
+const menuCartKey = 'redchili-cart:menu';
+const cartKey = token === null ? menuCartKey : `redchili-cart:${token}`;
 const pendingKey = `redchili-pending:${token ?? 'menu'}`;
 const receiptKey = `redchili-receipt:${token ?? 'menu'}`;
 const signatureIds = ['dish-3', 'dish-7', 'dish-12'];
@@ -27,6 +28,7 @@ const galleryIds = ['dish-14', 'dish-23', 'dish-21', 'dish-37'];
 type Pending = { key: string; lines: Pick<Line, 'id' | 'price' | 'quantity' | 'note'>[] };
 type Receipt = { key: string; number: number };
 type ReceiptDetails = { number: number; table_label: string; items: Line[]; total: number; status: 'received' | 'kitchen' | 'paid' | 'cancelled' };
+const maxCartItems = 45;
 function read<T>(key: string, fallback: T): T {
   try { return JSON.parse(localStorage.getItem(key) ?? 'null') ?? fallback; } catch { return fallback; }
 }
@@ -35,6 +37,7 @@ export function Guest({ lang }: { lang: Lang }) {
   const t = (ar: string, en: string) => lang === 'ar' ? ar : en;
   const [menu, setMenu] = useState<Item[]>(db ? [] : initialMenu);
   const [table, setTable] = useState<string | null>(null);
+  const [checkingTable, setCheckingTable] = useState(Boolean(db && token));
   const [loaded, setLoaded] = useState(!db);
   const [loadFailed, setLoadFailed] = useState(false);
   const [query, setQuery] = useState('');
@@ -58,11 +61,22 @@ export function Guest({ lang }: { lang: Lang }) {
     fetchMenu().then(items => { if (alive) setMenu(items); }).catch(() => { if (alive) setLoadFailed(true); })
       .finally(() => { if (alive) setLoaded(true); });
     if (db && token && /^[\da-f-]{36}$/i.test(token)) {
-      void db.rpc('resolve_table', { p_token: token }).then(({ data }) => { if (alive) setTable(data); });
+      void Promise.resolve(db.rpc('resolve_table', { p_token: token })).then(({ data }) => { if (alive) setTable(data); })
+        .finally(() => { if (alive) setCheckingTable(false); });
+    } else {
+      setCheckingTable(false);
     }
     return () => { alive = false; };
   }, []);
   useEffect(() => { localStorage.setItem(cartKey, JSON.stringify(cart)); }, [cart]);
+  useEffect(() => {
+    if (!table || read<Line[]>(cartKey, []).length || read<Pending | null>(pendingKey, null)) return;
+    const draft = read<Line[]>(menuCartKey, []);
+    if (!draft.length) return;
+    localStorage.setItem(cartKey, JSON.stringify(draft));
+    localStorage.removeItem(menuCartKey);
+    setCart(draft);
+  }, [table]);
   useEffect(() => {
     const client = db;
     if (!client || !token || !receipt || !receiptOpen) return;
@@ -82,7 +96,8 @@ export function Guest({ lang }: { lang: Lang }) {
   const count = cart.reduce((sum, item) => sum + item.quantity, 0);
   const matching = menu.filter(item => (!category || category === item.category) &&
     [item.name_ar, item.name_en, item.description_ar, item.description_en].some(value => value.toLowerCase().includes(query.trim().toLowerCase())));
-  const canAdd = Boolean(table && detail?.available && !pending);
+  const cartIsFull = cart.length >= maxCartItems && !cart.some(line => line.id === detail?.id);
+  const canAdd = Boolean((table || token === null) && detail?.available && !pending && !cartIsFull);
   const signatures = signatureIds.flatMap(id => menu.filter(item => item.id === id && photo(item.photo)));
   const gallery = galleryIds.flatMap(id => menu.filter(item => item.id === id && photo(item.photo)));
   const heroDish = menu.find(item => item.id === 'dish-3');
@@ -101,6 +116,21 @@ export function Guest({ lang }: { lang: Lang }) {
     setCart(existing ? cart.map(row => row.id === detail.id ? line : row) : [...cart, line]);
     setDetail(null);
   };
+
+  function bringMenuCart() {
+    const merged = new Map(cart.map(line => [line.id, line]));
+    const remaining: Line[] = [];
+    for (const line of read<Line[]>(menuCartKey, [])) {
+      if (merged.has(line.id) || merged.size < maxCartItems) merged.set(line.id, line);
+      else remaining.push(line);
+    }
+    const next = [...merged.values()];
+    localStorage.setItem(cartKey, JSON.stringify(next));
+    if (remaining.length) localStorage.setItem(menuCartKey, JSON.stringify(remaining));
+    else localStorage.removeItem(menuCartKey);
+    setConfirmed(false);
+    setCart(next);
+  }
 
   async function submit() {
     if (!db || !token || !table || busy || (!pending && (!cart.length || !confirmed))) return;
@@ -167,10 +197,14 @@ export function Guest({ lang }: { lang: Lang }) {
         </button>)}</div>
       </>}
     </section>}
-    <div className={table ? 'shell menu-shell ordering-layout' : 'shell menu-shell'} id="menu" tabIndex={-1}>
+    <div className="shell menu-shell ordering-layout" id="menu" tabIndex={-1}>
       <div className="menu-content">
       {token === null && <h2 className="menu-title">{t('القائمة', 'The menu')}</h2>}
-      {token && !table && loaded && <p role="status" className="notice">{db ? t('إذا لم تظهر طاولتك، امسح رمزها مجدداً.', 'If your table does not appear, scan its QR code again.') : t('الطلب غير متاح في معاينة القائمة.', 'Ordering is unavailable in this menu preview.')}</p>}
+      {token !== null && !table && <p role="status" className="notice">{checkingTable
+        ? t('جارٍ التحقق من الطاولة…', 'Checking your table…')
+        : t('امسح رمز الطاولة مرة أخرى أو افتح القائمة.', 'Scan your table QR code again or open the regular menu.')}
+        {!checkingTable && <> <a href="/menu">{t('القائمة', 'Menu')}</a></>}
+      </p>}
       <div className="menu-tools">
         <div className="menu-search"><span aria-hidden="true" /><input type="search" aria-label={t('ابحث في القائمة', 'Search menu')} placeholder={t('ابحث عن طبق', 'Search dishes')} value={query} onChange={event => setQuery(event.target.value)} /></div>
         <nav aria-label={t('الأقسام', 'Categories')} className="chips">{[{ id: '', name: { ar: 'كل القائمة', en: 'Full menu' } }, ...groups].map(group =>
@@ -190,7 +224,7 @@ export function Guest({ lang }: { lang: Lang }) {
           </button>)}</div></section>;
       })}
       </div>
-      {table && <aside className="order-sidebar" aria-label={t('سلتك', 'Your cart')}>
+      {(table || token === null) && <aside className="order-sidebar" aria-label={t('سلتك', 'Your cart')}>
         <h2>{t('سلتك', 'Your cart')}</h2>
         {!cart.length && !pending && <p>{t('اختر طبقًا لإضافته إلى سلتك.', 'Choose a dish to add it to your cart.')}</p>}
         {cart.length > 0 && <ul>{cart.map(line => <li key={line.id}><span>{line.quantity} × {name(line, lang)}</span><strong>{money(line.quantity * line.price, lang)}</strong></li>)}</ul>}
@@ -209,7 +243,7 @@ export function Guest({ lang }: { lang: Lang }) {
         </button>)}</div>
       </div>}
     </section>}
-    {table && (count > 0 || pending || receipt) && <aside className="cart-dock">
+    {(table || token === null) && (count > 0 || pending || receipt) && <aside className="cart-dock">
       {(count > 0 || pending) && <button className="primary" onClick={() => setCartOpen(true)}>
         {t('عرض السلة', 'View cart')} · {count} <span>{money(total(cart), lang)}</span></button>}
       {receipt && <button className="outline" onClick={() => setReceiptOpen(true)}>{t('آخر طلب', 'Last order')} #{receipt.number}</button>}
@@ -220,6 +254,7 @@ export function Guest({ lang }: { lang: Lang }) {
       <p><strong>{money(detail.price, lang)}</strong>{detail.calories !== null && ` · ${detail.calories} ${t('سعرة حرارية', 'kcal')}`}</p>
       {detail.prep_minutes !== null && <p>{t('وقت التحضير', 'Preparation time')} · {detail.prep_minutes} {t('دقيقة', 'min')}</p>}
       {detail[`allergens_${lang}`] && <p><strong>{t('مسببات الحساسية', 'Allergens')}</strong> · {detail[`allergens_${lang}`]}</p>}
+      {cartIsFull && <p role="status">{t('أزل طبقًا من السلة لإضافة طبق آخر.', 'Remove a dish from your cart to add another.')}</p>}
       {canAdd && <><label>{t('ملاحظات للمطبخ', 'Kitchen notes')}<textarea value={note} maxLength={240} onChange={event => setNote(event.target.value)} /></label>
         <div className="actions"><Quantity value={quantity} change={setQuantity} lang={lang} />
           <button className="primary" onClick={add}>{cart.some(line => line.id === detail.id) ? t('تحديث السلة', 'Update cart') : t('أضف للسلة', 'Add to cart')} · {money(quantity * detail.price, lang)}</button></div></>}
@@ -235,11 +270,17 @@ export function Guest({ lang }: { lang: Lang }) {
           {pending && line.note && <small>{line.note}</small>}
         </div>)}
         <div className="bill"><strong>{t('الإجمالي', 'Total')}</strong><strong>{money(total(cart), lang)}</strong></div>
-        {!pending && <label className="checkbox"><input type="checkbox" checked={confirmed} onChange={event => setConfirmed(event.target.checked)} />
+        {!cart.length && !pending && <p>{t('سلتك فارغة.', 'Your cart is empty.')}</p>}
+        {table && !pending && cart.length > 0 && read<Line[]>(menuCartKey, []).length > 0 && <div className="notice">
+          <p>{t('لديك أصناف محفوظة في القائمة العامة. عند دمج السلتين، تُستخدم الكمية والملاحظات من سلة القائمة للأصناف المكررة.', 'You have dishes saved from the regular menu. Combining carts uses the regular menu quantity and notes for duplicate dishes.')}</p>
+          <button className="outline" onClick={bringMenuCart}>{t('دمج السلتين', 'Combine carts')}</button>
+        </div>}
+        {!table && cart.length > 0 && <p className="notice" role="status">{t('امسح رمز QR على طاولتك وافتح الرابط في نفس المتصفح لإكمال الطلب.', 'Scan your table QR code and open the link in this browser to continue checkout.')}</p>}
+        {table && !pending && <label className="checkbox"><input type="checkbox" checked={confirmed} onChange={event => setConfirmed(event.target.checked)} />
           {t(`أؤكد أنني في طاولة ${table}`, `I confirm I am at table ${table}`)}</label>}
         {error && <p className="notice" role="alert">{orderError(error, lang)}</p>}
-        <button className="primary full" disabled={busy || (!pending && (!confirmed || !cart.length))} onClick={() => void submit()}>
-          {busy ? t('جارٍ الإرسال…', 'Sending…') : pending ? t('تحقق من الطلب وأعد المحاولة', 'Check and retry order') : t('أرسل الطلب · الدفع عند الكاشير', 'Place order · Pay at cashier')}</button>
+        {table && <button className="primary full" disabled={busy || (!pending && (!confirmed || !cart.length))} onClick={() => void submit()}>
+          {busy ? t('جارٍ الإرسال…', 'Sending…') : pending ? t('تحقق من الطلب وأعد المحاولة', 'Check and retry order') : t('أرسل الطلب · الدفع عند الكاشير', 'Place order · Pay at cashier')}</button>}
     </Dialog>}
     {receiptOpen && receipt && <Dialog label={t('إغلاق تفاصيل الطلب', 'Close order receipt')} close={() => setReceiptOpen(false)}>
       <div className="success"><h2>{t('طلبك', 'Your order')}</h2><strong dir="ltr">#{receipt.number}</strong>
