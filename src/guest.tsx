@@ -21,6 +21,8 @@ function Quantity({ value, change, lang }: { value: number; change: (value: numb
 const token = new URLSearchParams(location.search).get('table');
 const cartKey = `redchili-cart:${token ?? 'menu'}`;
 const pendingKey = `redchili-pending:${token ?? 'menu'}`;
+const signatureIds = ['dish-3', 'dish-7', 'dish-12'];
+const galleryIds = ['dish-14', 'dish-23', 'dish-21', 'dish-37'];
 type Pending = { key: string; lines: Pick<Line, 'id' | 'price' | 'quantity' | 'note'>[] };
 function read<T>(key: string, fallback: T): T {
   try { return JSON.parse(localStorage.getItem(key) ?? 'null') ?? fallback; } catch { return fallback; }
@@ -60,6 +62,17 @@ export function Guest({ lang }: { lang: Lang }) {
   const matching = menu.filter(item => (!category || category === item.category) &&
     [item.name_ar, item.name_en, item.description_ar, item.description_en].some(value => value.toLowerCase().includes(query.trim().toLowerCase())));
   const canAdd = Boolean(table && detail?.available && !pending);
+  const signatures = signatureIds.flatMap(id => menu.filter(item => item.id === id && photo(item.photo)));
+  const gallery = galleryIds.flatMap(id => menu.filter(item => item.id === id && photo(item.photo)));
+  const heroDish = menu.find(item => item.id === 'dish-3');
+  const heroPhoto = heroDish && photo(heroDish.photo);
+
+  function openDish(item: Item) {
+    const line = cart.find(row => row.id === item.id);
+    setQuantity(line?.quantity ?? 1);
+    setNote(line?.note ?? '');
+    setDetail(item);
+  }
   const add = () => {
     if (!detail || !canAdd) return;
     const existing = cart.find(line => line.id === detail.id);
@@ -105,20 +118,29 @@ export function Guest({ lang }: { lang: Lang }) {
   }
 
   return <main className="guest-menu">
-    <section className={table ? 'hero compact' : 'hero'}>
+    <section className={token !== null ? 'hero compact' : 'hero'}>
+      {token === null && heroPhoto && <img className="hero-image" src={heroPhoto} fetchPriority="high" alt="" />}
       <div className="shell hero-inner">
         <div className="hero-copy">
-          {!table && <div className="kicker">{t('مشويات على الفحم', 'Charcoal grills')}</div>}
-          <h1>{table ? t(`طاولة ${table}`, `Table ${table}`) : t('قائمة رد تشيلي', 'The RedChili menu')}</h1>
+          <h1>{table ? t(`طاولة ${table}`, `Table ${table}`) : token !== null ? t('قائمة رد تشيلي', 'Red Chili menu') : t('رد تشيلي', 'Red Chili')}</h1>
           <p>{table ? t('اختر أطباقك وأرسل طلبك إلى الكاشير.', 'Choose your dishes and send your order to the cashier.')
-            : t('للطلب، امسح رمز QR الموجود على طاولتك.', 'To order, scan the QR code on your table.')}</p>
-          {!table && <a className="hero-link" href="#menu">{t('تصفّح القائمة', 'Explore the menu')} <span aria-hidden="true">↓</span></a>}
+            : token !== null ? t('للطلب، امسح رمز QR الموجود على طاولتك.', 'To order, scan the QR code on your table.')
+              : t('مشويات على الفحم ومقبلات عربية', 'Charcoal grills & Arabic mezze')}</p>
+          {token === null && <a className="hero-link" href="#menu">{t('تصفّح القائمة', 'Explore the menu')} <span aria-hidden="true">↓</span></a>}
         </div>
-        {!table && <figure className="hero-photo"><img src="/images/dish-03.webp" fetchPriority="high" alt={t('تكة بحرينية مشوية', 'Charcoal grilled Bahraini tikka')} />
-          <figcaption>{t('تكة بحرينية', 'Bahraini tikka')}</figcaption></figure>}
       </div>
     </section>
-    <div className="shell menu-shell" id="menu">
+    {token === null && <section className="shell signatures" id="signatures">
+      {signatures.length > 0 && <>
+        <h2>{t('أطباقنا المميزة', 'Signature dishes')}</h2>
+        <div className="signature-grid">{signatures.map(item => <button className="signature-card" key={item.id} onClick={() => openDish(item)}>
+          <img src={photo(item.photo)} loading="lazy" alt="" />
+          <span><strong>{name(item, lang)}</strong><small>{money(item.price, lang)}</small></span>
+        </button>)}</div>
+      </>}
+    </section>}
+    <div className="shell menu-shell" id="menu" tabIndex={-1}>
+      {token === null && <h2 className="menu-title">{t('القائمة', 'The menu')}</h2>}
       {token && !table && loaded && <p role="status" className="notice">{db ? t('إذا لم تظهر طاولتك، امسح رمزها مجدداً.', 'If your table does not appear, scan its QR code again.') : t('الطلب غير متاح في معاينة القائمة.', 'Ordering is unavailable in this menu preview.')}</p>}
       <div className="menu-tools">
         <div className="menu-search"><span aria-hidden="true" /><input type="search" aria-label={t('ابحث في القائمة', 'Search menu')} placeholder={t('ابحث عن طبق', 'Search dishes')} value={query} onChange={event => setQuery(event.target.value)} /></div>
@@ -131,10 +153,7 @@ export function Guest({ lang }: { lang: Lang }) {
       {groups.map(group => {
         const items = matching.filter(item => item.category === group.id);
         return items.length > 0 && <section key={group.id} className="menu-group"><h2>{group.name[lang]}</h2>
-          <div className="dish-grid">{items.map(item => <button key={item.id} className="dish" onClick={() => {
-            const line = cart.find(row => row.id === item.id);
-            setQuantity(line?.quantity ?? 1); setNote(line?.note ?? ''); setDetail(item);
-          }}>
+          <div className="dish-grid">{items.map(item => <button key={item.id} className="dish" onClick={() => openDish(item)}>
             <div className="dish-media">{photo(item.photo) ? <img loading="lazy" src={photo(item.photo)} alt="" /> : <div className="dish-placeholder" />}</div>
             <div className="dish-copy"><h3>{name(item, lang)}</h3>{item[`description_${lang}`] && <p>{item[`description_${lang}`]}</p>}
               <div className="dish-meta"><strong>{money(item.price, lang)}</strong>{!item.available && <span className="sold-out">{t('غير متاح', 'Sold out')}</span>}<span className="dish-arrow" aria-hidden="true">{lang === 'ar' ? '↖' : '↗'}</span></div>
@@ -142,6 +161,14 @@ export function Guest({ lang }: { lang: Lang }) {
           </button>)}</div></section>;
       })}
     </div>
+    {token === null && <section className="gallery" id="gallery">
+      {gallery.length > 0 && <div className="shell">
+        <h2>{t('من مطبخ رد تشيلي', 'From the Red Chili kitchen')}</h2>
+        <div className="gallery-grid">{gallery.map(item => <button className="gallery-card" key={item.id} onClick={() => openDish(item)}>
+          <img src={photo(item.photo)} loading="lazy" alt="" /><span>{name(item, lang)}</span>
+        </button>)}</div>
+      </div>}
+    </section>}
     {table && (count > 0 || pending) && <aside className="cart-dock"><button className="primary" onClick={() => { setCartOpen(true); setOrder(null); }}>
       {t('عرض السلة', 'View cart')} · {count} <span>{money(total(cart), lang)}</span></button></aside>}
     {detail && <Dialog label={t('إغلاق تفاصيل الطبق', 'Close dish details')} close={() => setDetail(null)}>
