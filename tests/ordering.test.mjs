@@ -21,6 +21,7 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     `);
     await db.exec(readFileSync('supabase/migrations/202611110001_ordering.sql','utf8'));
     await db.exec(readFileSync('supabase/migrations/202611110002_guest_receipt.sql','utf8'));
+    await db.exec(readFileSync('supabase/migrations/202611110003_table_selection.sql','utf8'));
     await db.exec(readFileSync('supabase/seed.sql','utf8'));
     const cashier = randomUUID(), admin = randomUUID();
     await db.query('insert into auth.users values ($1),($2)', [cashier, admin]);
@@ -43,7 +44,13 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     assert.equal(await receipt(randomUUID(), request), null);
     assert.deepEqual((await submit(request)).rows, [first]);
     await assert.rejects(submit(request, lines.replace('"quantity":2','"quantity":3')), /invalid_request/);
-    await submit(randomUUID());
+    const selectedKey = randomUUID();
+    assert.deepEqual((await db.query('select * from public.list_order_tables()')).rows, [{ id: table.id, label: '7' }]);
+    await assert.rejects(db.query('select public.submit_selected_order($1,$2,$3)', [randomUUID(), selectedKey, lines]), /invalid_table/);
+    const selected = await db.query('select public.submit_selected_order($1,$2,$3) as number', [table.id, selectedKey, lines]);
+    const selectedReceipt = (await db.query('select public.selected_order_receipt($1,$2) as receipt', [table.id, selectedKey])).rows[0].receipt;
+    assert.equal(Number(selectedReceipt.number), Number(selected.rows[0].number));
+    assert.equal(selectedReceipt.table_label, '7');
     await db.exec('reset role; set role authenticated');
     const impersonate = (id, aal) => db.query("select set_config('test.user',$1,false),set_config('test.aal',$2,false)", [id, aal]);
     await impersonate(cashier,'aal1');

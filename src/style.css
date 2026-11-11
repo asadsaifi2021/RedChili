@@ -172,7 +172,10 @@ dialog::backdrop { background: #27130f99; }
 .ticket-line { border-top: 1px dashed #555; padding-block: .45rem; overflow-wrap: anywhere; }
 .ticket-line small { text-align: right; }
 @media (max-width: 740px) {
-  .dish-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .65rem; }
+  .dish-grid { grid-template-columns: minmax(0,1fr); gap: 1rem; }
+  .dish { width: 100%; }
+  .dish-media img,.dish-placeholder { aspect-ratio: 16/9; }
+  .dialog-body { overscroll-behavior: contain; }
   .site-nav { order: 3; justify-content: space-between; width: 100%; padding-block: .65rem; border-top: 1px solid var(--line); }
   .head-inner:has(.site-nav) { flex-wrap: wrap; padding-block-start: .5rem; }
   .hero-inner { min-height: 380px; }
@@ -181,6 +184,9 @@ dialog::backdrop { background: #27130f99; }
   .hero-copy { align-self: end; padding-block: 1.6rem; }
   .hero.compact .hero-copy { align-self: center; }
   .order-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 740px) and (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
 @media (max-width: 430px) {
   .shell { width: calc(100% - 1.5rem); }

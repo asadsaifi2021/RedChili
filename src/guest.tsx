@@ -25,8 +25,9 @@ const pendingKey = `redchili-pending:${token ?? 'menu'}`;
 const receiptKey = `redchili-receipt:${token ?? 'menu'}`;
 const signatureIds = ['dish-3', 'dish-7', 'dish-12'];
 const galleryIds = ['dish-14', 'dish-23', 'dish-21', 'dish-37'];
-type Pending = { key: string; lines: Pick<Line, 'id' | 'price' | 'quantity' | 'note'>[] };
-type Receipt = { key: string; number: number };
+type TableOption = { id: string; label: string };
+type Pending = { key: string; lines: Pick<Line, 'id' | 'price' | 'quantity' | 'note'>[]; selectedTable?: TableOption };
+type Receipt = { key: string; number: number; selectedTable?: TableOption };
 type ReceiptDetails = { number: number; table_label: string; items: Line[]; total: number; status: 'received' | 'kitchen' | 'paid' | 'cancelled' };
 const maxCartItems = 45;
 function read<T>(key: string, fallback: T): T {
@@ -48,6 +49,12 @@ export function Guest({ lang }: { lang: Lang }) {
   const [cart, setCart] = useState<Line[]>(() => read(cartKey, []));
   const [pending, setPending] = useState<Pending | null>(() => read(pendingKey, null));
   const [cartOpen, setCartOpen] = useState(false);
+  const [tables, setTables] = useState<TableOption[]>([]);
+  const [tableListState, setTableListState] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [tableListRetry, setTableListRetry] = useState(0);
+  const [selectedTable, setSelectedTable] = useState<TableOption | undefined>(() => read<Pending | null>(pendingKey, null)?.selectedTable);
+  const checkoutTable = table ?? pending?.selectedTable?.label ??
+    (tableListState === 'ready' ? tables.find(option => option.id === selectedTable?.id)?.label : undefined);
   const [confirmed, setConfirmed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -70,6 +77,17 @@ export function Guest({ lang }: { lang: Lang }) {
   }, []);
   useEffect(() => { localStorage.setItem(cartKey, JSON.stringify(cart)); }, [cart]);
   useEffect(() => {
+    if (!db || !cartOpen || token !== null) return;
+    let active = true;
+    setTableListState('loading');
+    void db.rpc('list_order_tables').then(({ data, error: failure }) => {
+      if (!active) return;
+      setTables(failure ? [] : data as TableOption[]);
+      setTableListState(failure ? 'error' : 'ready');
+    });
+    return () => { active = false; };
+  }, [cartOpen, tableListRetry]);
+  useEffect(() => {
     if (!table || read<Line[]>(cartKey, []).length || read<Pending | null>(pendingKey, null)) return;
     const draft = read<Line[]>(menuCartKey, []);
     if (!draft.length) return;
@@ -79,11 +97,13 @@ export function Guest({ lang }: { lang: Lang }) {
   }, [table]);
   useEffect(() => {
     const client = db;
-    if (!client || !token || !receipt || !receiptOpen) return;
-    const params = { p_token: token, p_key: receipt.key };
+    if (!client || !receipt || !receiptOpen || (!token && !receipt.selectedTable)) return;
+    const { key, selectedTable: receiptTable } = receipt;
     let active = true;
     const refresh = async () => {
-      const { data, error: failure } = await client.rpc('guest_receipt', params);
+      const { data, error: failure } = receiptTable
+        ? await client.rpc('selected_order_receipt', { p_table_id: receiptTable.id, p_key: key })
+        : await client.rpc('guest_receipt', { p_token: token, p_key: key });
       if (!active) return;
       setReceiptUnavailable(Boolean(failure || !data));
       if (data) setReceiptDetails(data as ReceiptDetails);
@@ -133,14 +153,20 @@ export function Guest({ lang }: { lang: Lang }) {
   }
 
   async function submit() {
-    if (!db || !token || !table || busy || (!pending && (!cart.length || !confirmed))) return;
-    const attempt = pending ?? { key: crypto.randomUUID(), lines: cart.map(({ id, quantity, note, price }) => ({ id, quantity, note, price })) };
+    if (!db || !checkoutTable || busy || (!pending && (!cart.length || !confirmed))) return;
+    const attempt = pending ?? {
+      key: crypto.randomUUID(),
+      lines: cart.map(({ id, quantity, note, price }) => ({ id, quantity, note, price })),
+      selectedTable: token === null ? selectedTable : undefined,
+    };
     localStorage.setItem(pendingKey, JSON.stringify(attempt));
     setPending(attempt);
     setBusy(true);
     setError('');
     try {
-      const { data, error: failure } = await db.rpc('submit_order', { p_token: token, p_key: attempt.key, p_lines: attempt.lines });
+      const { data, error: failure } = attempt.selectedTable
+        ? await db.rpc('submit_selected_order', { p_table_id: attempt.selectedTable.id, p_key: attempt.key, p_lines: attempt.lines })
+        : await db.rpc('submit_order', { p_token: token, p_key: attempt.key, p_lines: attempt.lines });
       if (failure) {
         // Keep the key after ambiguous transport errors so retries cannot create another order.
         if (failure.code === 'P0001' || failure.code === '22P02') {
@@ -156,10 +182,15 @@ export function Guest({ lang }: { lang: Lang }) {
           }));
           setConfirmed(false);
         }
+        if (failure.message === 'invalid_table' && attempt.selectedTable) {
+          setSelectedTable(undefined);
+          setConfirmed(false);
+          setTableListRetry(value => value + 1);
+        }
         setError(failure.message);
         return;
       }
-      const savedReceipt = { number: Number(data), key: attempt.key };
+      const savedReceipt = { number: Number(data), key: attempt.key, selectedTable: attempt.selectedTable };
       localStorage.setItem(receiptKey, JSON.stringify(savedReceipt));
       setReceiptDetails(null);
       setReceiptUnavailable(false);
@@ -275,16 +306,30 @@ export function Guest({ lang }: { lang: Lang }) {
           <p>{t('لديك أصناف محفوظة في القائمة العامة. عند دمج السلتين، تُستخدم الكمية والملاحظات من سلة القائمة للأصناف المكررة.', 'You have dishes saved from the regular menu. Combining carts uses the regular menu quantity and notes for duplicate dishes.')}</p>
           <button className="outline" onClick={bringMenuCart}>{t('دمج السلتين', 'Combine carts')}</button>
         </div>}
-        {!table && cart.length > 0 && <p className="notice" role="status">{t('امسح رمز QR على طاولتك وافتح الرابط في نفس المتصفح لإكمال الطلب.', 'Scan your table QR code and open the link in this browser to continue checkout.')}</p>}
-        {table && !pending && <label className="checkbox"><input type="checkbox" checked={confirmed} onChange={event => setConfirmed(event.target.checked)} />
-          {t(`أؤكد أنني في طاولة ${table}`, `I confirm I am at table ${table}`)}</label>}
+        {token === null && cart.length > 0 && !pending && (db ? <>
+          <label>{t('اختر طاولتك', 'Select your table')}
+            <select value={selectedTable?.id ?? ''} disabled={tableListState !== 'ready' || !tables.length} onChange={event => {
+              setSelectedTable(tables.find(option => option.id === event.target.value));
+              setConfirmed(false);
+              setError('');
+            }}>
+              <option value="">{t('اختر رقم الطاولة', 'Choose a table')}</option>
+              {tables.map(option => <option key={option.id} value={option.id}>{option.label}</option>)}
+            </select>
+          </label>
+          {tableListState === 'loading' && <p role="status">{t('جارٍ تحميل الطاولات…', 'Loading tables…')}</p>}
+          {tableListState === 'error' && <button className="outline" onClick={() => setTableListRetry(value => value + 1)}>{t('أعد تحميل الطاولات', 'Retry loading tables')}</button>}
+          {tableListState === 'ready' && !tables.length && <p role="status">{t('لا توجد طاولات متاحة.', 'No tables are available.')}</p>}
+        </> : <p role="status">{t('الطلب غير متاح في معاينة القائمة.', 'Ordering is unavailable in this menu preview.')}</p>)}
+        {checkoutTable && !pending && <label className="checkbox"><input type="checkbox" checked={confirmed} onChange={event => setConfirmed(event.target.checked)} />
+          {t(`أؤكد أنني في طاولة ${checkoutTable}`, `I confirm I am at table ${checkoutTable}`)}</label>}
         {error && <p className="notice" role="alert">{orderError(error, lang)}</p>}
-        {table && <button className="primary full" disabled={busy || (!pending && (!confirmed || !cart.length))} onClick={() => void submit()}>
+        {db && <button className="primary full" disabled={busy || !checkoutTable || (!pending && (!confirmed || !cart.length))} onClick={() => void submit()}>
           {busy ? t('جارٍ الإرسال…', 'Sending…') : pending ? t('تحقق من الطلب وأعد المحاولة', 'Check and retry order') : t('أرسل الطلب · الدفع عند الكاشير', 'Place order · Pay at cashier')}</button>}
     </Dialog>}
     {receiptOpen && receipt && <Dialog label={t('إغلاق تفاصيل الطلب', 'Close order receipt')} close={() => setReceiptOpen(false)}>
       <div className="success"><h2>{t('طلبك', 'Your order')}</h2><strong dir="ltr">#{receipt.number}</strong>
-        <p>{t('طاولة', 'Table')} {receiptDetails?.table_label ?? table}</p>
+        <p>{t('طاولة', 'Table')} {receiptDetails?.table_label ?? receipt.selectedTable?.label ?? table}</p>
         <p role="status">{receiptUnavailable ? t('تعذر تحديث حالة الطلب الآن.', 'Order status is temporarily unavailable.') :
           receiptDetails?.status === 'paid' ? t('تم الدفع', 'Paid') :
           receiptDetails?.status === 'cancelled' ? t('تم إلغاء الطلب', 'Order cancelled') :
