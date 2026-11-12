@@ -22,12 +22,14 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     await db.exec(readFileSync('supabase/migrations/202611110001_ordering.sql','utf8'));
     await db.exec(readFileSync('supabase/migrations/202611110002_guest_receipt.sql','utf8'));
     await db.exec(readFileSync('supabase/migrations/202611110003_table_selection.sql','utf8'));
+    await db.exec(readFileSync('supabase/migrations/202611120001_workbook_menu.sql','utf8'));
+    await db.exec(readFileSync('supabase/migrations/202611120002_staff_mfa.sql','utf8'));
     await db.exec(readFileSync('supabase/seed.sql','utf8'));
     const cashier = randomUUID(), admin = randomUUID();
     await db.query('insert into auth.users values ($1),($2)', [cashier, admin]);
-    await db.query("insert into public.staff values ($1,'cashier'),($2,'admin')", [cashier, admin]);
+    await db.query("insert into public.staff values ($1,'cashier',true),($2,'admin',false)", [cashier, admin]);
     const { rows: [table] } = await db.query("insert into public.dining_tables(label) values ('7') returning *");
-    const lines = JSON.stringify([{ id: 'dish-1', quantity: 2, price: 4400, note: 'بدون بصل' }]);
+    const lines = JSON.stringify([{ id: 'dish-3', quantity: 2, price: 3400, note: 'بدون بصل' }]);
     const request = randomUUID();
     const submit = (key, body = lines, token = table.token) =>
       db.query('select public.submit_order($1,$2,$3) as number', [token, key, body]);
@@ -36,7 +38,8 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     assert.equal(Number(count), 45);
     await assert.rejects(db.query('select * from public.orders'), /permission denied/);
     await assert.rejects(submit(request, lines, randomUUID()), /invalid_table/);
-    await assert.rejects(submit(request, lines.replace('4400','1')), /price_changed/);
+    await assert.rejects(submit(request, lines.replace('3400','1')), /price_changed/);
+    await assert.rejects(submit(request, JSON.stringify([{ id: 'menu-1', quantity: 1, price: 0 }])), /item_unavailable/);
     const { rows: [first] } = await submit(request);
     const receipt = async (token, key) => (await db.query('select public.guest_receipt($1,$2) as receipt', [token, key])).rows[0].receipt;
     assert.equal((await receipt(table.token, request)).status, 'received');
@@ -58,17 +61,17 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     await impersonate(cashier,'aal2');
     const { rows: orders } = await db.query('select * from public.orders order by number');
     assert.equal(orders.length, 2);
-    assert.equal(orders[0].total, 8800);
-    assert.equal((await db.query("update public.menu_items set price=9999 where id='dish-1'")).affectedRows, 0);
-    await impersonate(admin,'aal2');
-    assert.equal((await db.query("update public.menu_items set price=4500 where id='dish-1'")).affectedRows, 1);
+    assert.equal(orders[0].total, 6800);
+    assert.equal((await db.query("update public.menu_items set price=9999 where id='dish-3'")).affectedRows, 0);
+    await impersonate(admin,'aal1');
+    assert.equal((await db.query("update public.menu_items set price=4500 where id='dish-3'")).affectedRows, 1);
     await impersonate(cashier,'aal2');
     const id = orders[0].id;
     await db.query("select public.change_order($1,1,'edit',$2)", [id, lines.replace('"quantity":2','"quantity":3')]);
     await assert.rejects(db.query("select public.change_order($1,1,'print')", [id]), /order_changed/);
     await db.query("select public.change_order($1,2,'print')", [id]);
     const { rows: [updated] } = await db.query('select * from public.orders where id=$1', [id]);
-    assert.equal(updated.total, 13200);
+    assert.equal(updated.total, 10200);
     assert.equal(updated.printed_revision, 2);
     assert.equal((await receipt(table.token, request)).status, 'kitchen');
     await assert.rejects(db.query("select public.pay_table($1,$2,'card')", [table.id, '{}']), /bill_changed/);
@@ -80,7 +83,7 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     await db.exec('reset role; set role anon');
     const paidReceipt = await receipt(table.token, request);
     assert.equal(paidReceipt.status, 'paid');
-    assert.equal(paidReceipt.total, 13200);
+    assert.equal(paidReceipt.total, 10200);
     assert.deepEqual(Object.keys(paidReceipt).sort(), ['items', 'number', 'status', 'table_label', 'total']);
   } finally { await db.close(); }
 });

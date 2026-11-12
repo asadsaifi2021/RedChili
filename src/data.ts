@@ -20,7 +20,7 @@ export const initialMenu: Item[] = catalog.flatMap(group => group.items.map((ite
   id: item.id, category: group.id, name_ar: item.name.ar, name_en: item.name.en,
   description_ar: item.description?.ar ?? '', description_en: item.description?.en ?? '',
   photo: item.image, price: item.priceHalalas, calories: item.calories ?? null,
-  prep_minutes: null, allergens_ar: '', allergens_en: '', available: true, published: true, position,
+  prep_minutes: null, allergens_ar: '', allergens_en: '', available: item.priceHalalas > 0, published: true, position,
 })));
 const url = import.meta.env.VITE_SUPABASE_URL;
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;

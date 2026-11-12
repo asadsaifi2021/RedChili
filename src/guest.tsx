@@ -208,15 +208,20 @@ export function Guest({ lang }: { lang: Lang }) {
 
   return <main className="guest-menu">
     <section className={token !== null ? 'hero compact' : 'hero'}>
-      {token === null && heroPhoto && <img className="hero-image" src={heroPhoto} fetchPriority="high" alt="" />}
       <div className="shell hero-inner">
         <div className="hero-copy">
-          <h1>{table ? t(`طاولة ${table}`, `Table ${table}`) : token !== null ? t('قائمة رد تشيلي', 'Red Chili menu') : t('رد تشيلي', 'Red Chili')}</h1>
+          {token === null && <p className="theme-eyebrow">{t('نكهة عربية على الفحم', 'ARABIC SOUL. CHARCOAL FIRE.')}</p>}
+          <h1>{table ? t(`طاولة ${table}`, `Table ${table}`) : token !== null ? t('قائمة رد تشيلي', 'Red Chili menu') :
+            <>{t('أكل طيب.', 'Good food.')}<br /><em>{t('وصحبة أجمل.', 'Great company.')}</em></>}</h1>
           <p>{table ? t('اختر أطباقك وأرسل طلبك إلى الكاشير.', 'Choose your dishes and send your order to the cashier.')
             : token !== null ? t('للطلب، امسح رمز QR الموجود على طاولتك.', 'To order, scan the QR code on your table.')
-              : t('مشويات على الفحم ومقبلات عربية', 'Charcoal grills & Arabic mezze')}</p>
+              : t('تذوق مشوياتنا على الفحم ومقبلاتنا العربية الطازجة.', 'Explore our charcoal grills, fresh appetizers, and something for everyone.')}</p>
           {token === null && <a className="hero-link" href="#menu">{t('تصفّح القائمة', 'Explore the menu')} <span aria-hidden="true">↓</span></a>}
         </div>
+        {token === null && heroPhoto && <figure className="theme-hero-photo">
+          <img src={heroPhoto} fetchPriority="high" alt={heroDish ? name(heroDish, lang) : ''} />
+          <figcaption>{heroDish && name(heroDish, lang)}</figcaption>
+        </figure>}
       </div>
     </section>
     {token === null && <section className="shell signatures" id="signatures">
@@ -250,7 +255,7 @@ export function Guest({ lang }: { lang: Lang }) {
           <div className="dish-grid">{items.map(item => <button key={item.id} className="dish" onClick={() => openDish(item)}>
             <div className="dish-media">{photo(item.photo) ? <img loading="lazy" src={photo(item.photo)} alt="" /> : <div className="dish-placeholder" />}</div>
             <div className="dish-copy"><h3>{name(item, lang)}</h3>{item[`description_${lang}`] && <p>{item[`description_${lang}`]}</p>}
-              <div className="dish-meta"><strong>{money(item.price, lang)}</strong>{!item.available && <span className="sold-out">{t('غير متاح', 'Sold out')}</span>}<span className="dish-arrow" aria-hidden="true">{lang === 'ar' ? '↖' : '↗'}</span></div>
+              <div className="dish-meta"><strong>{item.price > 0 ? money(item.price, lang) : t('السعر قريبًا', 'Price pending')}</strong>{!item.available && item.price > 0 && <span className="sold-out">{t('غير متاح', 'Sold out')}</span>}<span className="dish-arrow" aria-hidden="true">{lang === 'ar' ? '↖' : '↗'}</span></div>
             </div>
           </button>)}</div></section>;
       })}
@@ -282,7 +287,7 @@ export function Guest({ lang }: { lang: Lang }) {
     {detail && <Dialog label={t('إغلاق تفاصيل الطبق', 'Close dish details')} close={() => setDetail(null)}>
       {photo(detail.photo) && <img className="detail-image" src={photo(detail.photo)} alt={name(detail, lang)} />}
       <h2>{name(detail, lang)}</h2><p>{detail[`description_${lang}`]}</p>
-      <p><strong>{money(detail.price, lang)}</strong>{detail.calories !== null && ` · ${detail.calories} ${t('سعرة حرارية', 'kcal')}`}</p>
+      <p><strong>{detail.price > 0 ? money(detail.price, lang) : t('السعر قريبًا', 'Price pending')}</strong>{detail.calories !== null && ` · ${detail.calories} ${t('سعرة حرارية', 'kcal')}`}</p>
       {detail.prep_minutes !== null && <p>{t('وقت التحضير', 'Preparation time')} · {detail.prep_minutes} {t('دقيقة', 'min')}</p>}
       {detail[`allergens_${lang}`] && <p><strong>{t('مسببات الحساسية', 'Allergens')}</strong> · {detail[`allergens_${lang}`]}</p>}
       {cartIsFull && <p role="status">{t('أزل طبقًا من السلة لإضافة طبق آخر.', 'Remove a dish from your cart to add another.')}</p>}

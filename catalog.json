@@ -1,350 +1,99 @@
 [
   {
-    "id": "new",
+    "id": "soups",
     "name": {
-      "en": "New arrivals",
-      "ar": "جديد"
+      "en": "Soups",
+      "ar": "شوربة"
     },
-    "subtitle": "A fresh take on your favorites",
     "items": [
       {
-        "id": "dish-1",
+        "id": "menu-1",
         "name": {
-          "en": "Meat shawarma",
-          "ar": "شاورما لحم"
+          "en": "Lentil Soup",
+          "ar": "شوربة عدس"
         },
         "description": {
-          "en": "Marinated meat shawarma grilled over charcoal, served with fresh bread, tomatoes, onions, and parsley sauce on the side.",
-          "ar": "صيخ شاورما لحم متبّل ومشوي على الفحم، يُقدّم مع خبز طازج ، طمام، بصل، وصوص بقدونسية جانبي."
+          "en": "A comforting blend of red lentils, onions and mild spices, simmered until smooth.",
+          "ar": "شوربة دافئة من العدس الأحمر والبصل والبهارات الخفيفة، تُطهى حتى تصبح ناعمة."
         },
-        "priceHalalas": 4400,
-        "calories": 450,
-        "image": "/images/dish-01.webp"
+        "priceHalalas": 0,
+        "calories": 180,
+        "image": ""
       },
       {
-        "id": "dish-2",
+        "id": "menu-2",
         "name": {
-          "en": "Chicken shawarma",
-          "ar": "شاورما دجاج"
+          "en": "Mushroom Soup",
+          "ar": "شوربة فطر"
         },
         "description": {
-          "en": "Marinated chicken shawarma grilled over charcoal, served with fresh bread, pickles, and garlic sauce on the side.",
-          "ar": "صيخ شاورما دجاج متبّل ومشوي على الفحم، يُقدّم مع خبز طازج، مخلل، وصوص الثوم الجانبي."
+          "en": "Creamy mushroom soup prepared with mushrooms, cream and gentle seasoning.",
+          "ar": "شوربة كريمية محضّرة بالفطر والكريمة والتوابل الخفيفة."
         },
-        "priceHalalas": 3900,
-        "calories": 366,
-        "image": "/images/dish-02.webp"
+        "priceHalalas": 0,
+        "calories": 240,
+        "image": ""
       }
     ]
   },
   {
-    "id": "grills",
+    "id": "salads",
     "name": {
-      "en": "Charcoal grills",
-      "ar": "المشويات"
+      "en": "Salads",
+      "ar": "سلطات"
     },
-    "subtitle": "From the fire, full of flavor",
     "items": [
       {
-        "id": "dish-3",
+        "id": "menu-3",
         "name": {
-          "en": "Bahraini Tikka",
-          "ar": "تكة بحرينية"
+          "en": "Tabbouleh",
+          "ar": "تبولة"
         },
         "description": {
-          "en": "Four meat skewers marinated in a distinctive dried lime blend, served with leeks, lemon, and white onion.",
-          "ar": "4 اصياخ من اللحم متبلة بخلطة اللومي المميزة تقدم مع الكراث والليمون والبصل الابيض"
+          "en": "A fresh parsley salad with bulgur, tomatoes, mint, lemon and olive oil.",
+          "ar": "سلطة بقدونس طازجة مع البرغل والطماطم والنعناع والليمون وزيت الزيتون."
         },
-        "priceHalalas": 3400,
-        "calories": 370,
-        "image": "/images/dish-03.webp"
-      },
-      {
-        "id": "dish-4",
-        "name": {
-          "en": "تكه روب",
-          "ar": "تكة لحم بالروب"
-        },
-        "description": {
-          "en": "Four meat skewers marinated in a special yogurt and tahini blend, served with leeks, lemon, and white onion.",
-          "ar": "4 اصياخ من اللحم متبلة بخلطة الروب الخاصة و الطحينة تقدم مع الكراث والليمون والبصل الابيض"
-        },
-        "priceHalalas": 3400,
-        "calories": 390,
-        "image": "/images/dish-04.webp"
-      },
-      {
-        "id": "dish-5",
-        "name": {
-          "en": "Chicken Tikka",
-          "ar": "تكة دجاج"
-        },
-        "description": {
-          "en": "Four chicken skewers in our signature marinade, served with leeks, lemon, and white onion.",
-          "ar": "4 اصياخ من الدجاج بخلطتنا المميزة تقدم مع الكراث والليمون والبصل الابيض"
-        },
-        "priceHalalas": 3100,
-        "calories": 290,
-        "image": "/images/dish-05.webp"
-      },
-      {
-        "id": "dish-6",
-        "name": {
-          "en": "Tandoori Chicken Tikka",
-          "ar": "تكة دجاج تندوري"
-        },
-        "description": {
-          "en": "Four chicken skewers in a tandoori marinade, served with leeks, lemon, and white onion.",
-          "ar": "4 اصياخ من الدجاج المتبلة بخلطة التندوري تقدم مع الكراث والليمون والبصل الابيض"
-        },
-        "priceHalalas": 3100,
-        "calories": 320,
-        "image": "/images/dish-06.webp"
-      },
-      {
-        "id": "dish-7",
-        "name": {
-          "en": "Arayes 2 pieces",
-          "ar": "عرايس حبتين"
-        },
-        "description": {
-          "en": "Minced meat and fresh vegetables stuffed into charcoal grilled bread. Two pieces.",
-          "ar": "خليط اللحم المفروم مع الخضروات الطازجة محشوه بالخبز المشوي على الفحم"
-        },
-        "priceHalalas": 2700,
-        "calories": 450,
-        "image": "/images/dish-07.webp"
-      },
-      {
-        "id": "dish-8",
-        "name": {
-          "en": "Grilled luqaimat",
-          "ar": "لقيمات مشوية"
-        },
-        "description": {
-          "en": "Meat pieces mixed with fat for a rich charcoal grilled flavor, served with fresh onion.",
-          "ar": "قطع من اللحم الممزوجه بالشحم بنكه مميزه وطعم الشواء اللذيذ تقدم مع البصل الطازج"
-        },
-        "priceHalalas": 3900,
-        "calories": null,
-        "image": "/images/dish-08.webp"
-      },
-      {
-        "id": "dish-9",
-        "name": {
-          "en": "Spicy Kebab",
-          "ar": "كباب سبايسي"
-        },
-        "description": {
-          "en": "Three kebab skewers served with spicy sauce.",
-          "ar": "3 اصياخ كباب تقدم مع صوص حار"
-        },
-        "priceHalalas": 3400,
-        "calories": 690,
-        "image": "/images/dish-09.webp"
-      },
-      {
-        "id": "dish-10",
-        "name": {
-          "en": "Uncel Mahmoud`s Kebab",
-          "ar": "كباب العم محمود"
-        },
-        "description": {
-          "en": "Three lamb kebab skewers made with Uncle Mahmoud’s original blend, served with grilled onion and tomato.",
-          "ar": "3 اصياخ كباب غنم بخلطة العم محمود الأصلية تقدم مع بصل وطماطم مشوية"
-        },
-        "priceHalalas": 3100,
-        "calories": 450,
-        "image": "/images/dish-10.webp"
-      },
-      {
-        "id": "dish-11",
-        "name": {
-          "en": "Eggplant Kebab",
-          "ar": "كباب باذنجان"
-        },
-        "description": {
-          "en": "Three kebab skewers with a special yogurt sauce and crispy eggplant slices.",
-          "ar": "3 اصياخ كباب تقدم مع صوص اللبن المميز مع شرائح الباذنجان المقرمشة"
-        },
-        "priceHalalas": 3400,
-        "calories": 590,
-        "image": "/images/dish-11.webp"
-      },
-      {
-        "id": "dish-12",
-        "name": {
-          "en": "Molasses Kebab",
-          "ar": "كباب الدبس"
-        },
-        "description": {
-          "en": "Three kebab skewers with a distinctive blend of date and pomegranate molasses.",
-          "ar": "3 اصياخ من كباب تقدم بمزيج مميز من دبس التمر ودبس الرمان"
-        },
-        "priceHalalas": 3400,
-        "calories": 560,
-        "image": "/images/dish-12.webp"
-      },
-      {
-        "id": "dish-13",
-        "name": {
-          "en": "Castelleta",
-          "ar": "ريش"
-        },
-        "description": {
-          "en": "Three lamb chops seasoned with salt and black pepper.",
-          "ar": "3 قطع من الريش مضاف اليها الملح والفلفل الاسود"
-        },
-        "priceHalalas": 5400,
-        "calories": 345,
-        "image": "/images/dish-13.webp"
-      },
-      {
-        "id": "dish-14",
-        "name": {
-          "en": "Grilled Chicken",
-          "ar": "فروج مشوي"
-        },
-        "description": {
-          "en": "Chicken grilled with a distinctive blend of spices.",
-          "ar": "فروج مشوي بمزيج من التوابل المميزة"
-        },
-        "priceHalalas": 3400,
-        "calories": 450,
-        "image": "/images/dish-14.webp"
-      }
-    ]
-  },
-  {
-    "id": "sides",
-    "name": {
-      "en": "On the side",
-      "ar": "كملهــــــا"
-    },
-    "subtitle": "Make it a complete meal",
-    "items": [
-      {
-        "id": "dish-15",
-        "name": {
-          "en": "Potatoes",
-          "ar": "بطاطس"
-        },
-        "description": {
-          "en": "French fries with a special seasoning blend.",
-          "ar": "بطاطس مقلية بخلطة خاصة"
-        },
-        "priceHalalas": 1200,
-        "calories": 450,
-        "image": "/images/dish-15.webp"
-      },
-      {
-        "id": "dish-16",
-        "name": {
-          "en": "Saffron rice",
-          "ar": "أرز بالزعفران"
-        },
-        "description": {
-          "en": "",
-          "ar": ""
-        },
-        "priceHalalas": 1100,
-        "calories": null,
-        "image": "/images/dish-16.webp"
-      },
-      {
-        "id": "dish-17",
-        "name": {
-          "en": "Modern potato",
-          "ar": "مودرن بطاطا حرّة"
-        },
-        "description": {
-          "en": "",
-          "ar": ""
-        },
-        "priceHalalas": 1500,
-        "calories": null,
-        "image": "/images/dish-17.webp"
-      },
-      {
-        "id": "dish-18",
-        "name": {
-          "en": "Chicken wings 10 pieces",
-          "ar": "أجنحة دجاج 10 قطع"
-        },
-        "description": {
-          "en": "Ten marinated grilled chicken wings, served with fresh onion.",
-          "ar": "اجنحة الدجاج المتبله بالتوابل الاصليه والمشوية تقدم مع البصل الطازج"
-        },
-        "priceHalalas": 2700,
-        "calories": null,
-        "image": "/images/dish-18.webp"
-      },
-      {
-        "id": "dish-19",
-        "name": {
-          "en": "Chicken wings 6 pieces",
-          "ar": "أجنحة دجاج 6 قطع"
-        },
-        "description": {
-          "en": "Six marinated grilled chicken wings, served with fresh onion.",
-          "ar": "اجنحة الدجاج المتبله بالتوابل الاصليه والمشوية تقدم مع البصل الطازج"
-        },
-        "priceHalalas": 1900,
-        "calories": null,
-        "image": "/images/dish-19.webp"
-      },
-      {
-        "id": "dish-20",
-        "name": {
-          "en": "Arayes 1 piece",
-          "ar": "عرايس حبة"
-        },
-        "description": {
-          "en": "Minced meat and fresh vegetables stuffed into charcoal grilled bread. One piece.",
-          "ar": "خليط اللحم المفروم مع الخضروات الطازجة محشوه بالخبز المشوي على الفحم"
-        },
-        "priceHalalas": 1900,
-        "calories": null,
-        "image": "/images/dish-20.webp"
-      }
-    ]
-  },
-  {
-    "id": "appetizers",
-    "name": {
-      "en": "Appetizers",
-      "ar": "المقبلات"
-    },
-    "subtitle": "A delicious place to begin",
-    "items": [
-      {
-        "id": "dish-21",
-        "name": {
-          "en": "Fatuluh",
-          "ar": "فتوله"
-        },
-        "description": {
-          "en": "A combination of tabbouleh and fattoush salad with crispy bread.",
-          "ar": "مزيج من سلطة التبوله وسلطة الفتوش مع الخبز المقرمش"
-        },
-        "priceHalalas": 1400,
-        "calories": 200,
-        "image": "/images/dish-21.webp"
+        "priceHalalas": 0,
+        "calories": 220,
+        "image": ""
       },
       {
         "id": "dish-22",
         "name": {
           "en": "Rocca Salad",
-          "ar": "سلطة جرجير"
+          "ar": "سلطة الجرجير"
         },
         "description": {
-          "en": "Rocca salad with a mixture of fresh vegetables.",
-          "ar": "سلطة الجرجير مع خليط من الخضار الطازجه"
+          "en": "Fresh rocca leaves tossed with vegetables and a light lemon dressing.",
+          "ar": "أوراق جرجير طازجة ممزوجة بالخضروات وتتبيلة خفيفة من الليمون."
         },
         "priceHalalas": 1400,
-        "calories": 340,
+        "calories": 150,
         "image": "/images/dish-22.webp"
       },
+      {
+        "id": "menu-5",
+        "name": {
+          "en": "Fattoush",
+          "ar": "فتوش"
+        },
+        "description": {
+          "en": "A crisp mix of lettuce, tomatoes, cucumber, toasted bread and tangy sumac dressing.",
+          "ar": "مزيج مقرمش من الخس والطماطم والخيار والخبز المحمّص وتتبيلة السماق."
+        },
+        "priceHalalas": 0,
+        "calories": 230,
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": "cold-starters",
+    "name": {
+      "en": "Cold appetizers",
+      "ar": "مقبلات باردة"
+    },
+    "items": [
       {
         "id": "dish-23",
         "name": {
@@ -352,340 +101,585 @@
           "ar": "حمص"
         },
         "description": {
-          "en": "Hummus with tahini and olive oil.",
-          "ar": "حمص مع الطحينة وزيت الزيتون"
+          "en": "A smooth chickpea dip blended with tahini, lemon and olive oil.",
+          "ar": "حمص ناعم ممزوج بالطحينة والليمون وزيت الزيتون."
         },
         "priceHalalas": 1200,
-        "calories": 243,
+        "calories": 250,
         "image": "/images/dish-23.webp"
-      },
-      {
-        "id": "dish-24",
-        "name": {
-          "en": "Hummus Asyakh",
-          "ar": "حمص أصياخ"
-        },
-        "description": {
-          "en": "Hummus with Asyakh’s special blend.",
-          "ar": "حمص بخلطة أصياخ الخاصه"
-        },
-        "priceHalalas": 1400,
-        "calories": 310,
-        "image": "/images/dish-24.webp"
       },
       {
         "id": "dish-25",
         "name": {
-          "en": "Mutabal",
+          "en": "Moutabal",
           "ar": "متبل"
         },
         "description": {
-          "en": "Grilled eggplant with yogurt, tahini, and garlic.",
-          "ar": "الباذنجان المشوي مع الزبادي والطحينة والثوم"
+          "en": "Smoky roasted eggplant blended with tahini, lemon and garlic.",
+          "ar": "باذنجان مشوي بنكهة مدخنة ممزوج بالطحينة والليمون والثوم."
         },
         "priceHalalas": 1200,
-        "calories": 210,
+        "calories": 220,
         "image": "/images/dish-25.webp"
-      },
-      {
-        "id": "dish-26",
-        "name": {
-          "en": "Crispy Fattah",
-          "ar": "كرسبي فته"
-        },
-        "description": {
-          "en": "Layers of crispy eggplant and crispy bread with a special yogurt sauce.",
-          "ar": "طبقات الباذنجان المقرمش مع الخبز المقرمش مع صوص اللبن المميز"
-        },
-        "priceHalalas": 1400,
-        "calories": 550,
-        "image": "/images/dish-26.webp"
-      },
-      {
-        "id": "dish-27",
-        "name": {
-          "en": "fusion corn",
-          "ar": "فيوجن ذرة"
-        },
-        "description": {
-          "en": "Corn salad with honey mustard sauce and crispy roasted corn.",
-          "ar": "سلطة ذرة بصوص هني ماسترد المميز مع الذرة الكرسبي المحمصة"
-        },
-        "priceHalalas": 1900,
-        "calories": null,
-        "image": "/images/dish-27.webp"
-      },
-      {
-        "id": "dish-28",
-        "name": {
-          "en": "Flower salad",
-          "ar": "سلطة الزهرة المكرملة"
-        },
-        "description": {
-          "en": "Caramelized cauliflower pieces served with crispy bread and a special sauce.",
-          "ar": "قطع من الزهرة المكرملة تقدم مع الخبز المقرمش وصوصنا الخاص"
-        },
-        "priceHalalas": 1900,
-        "calories": null,
-        "image": "/images/dish-28.webp"
-      },
-      {
-        "id": "dish-29",
-        "name": {
-          "en": "Hummus maabouj",
-          "ar": "حمص معبوج"
-        },
-        "description": {
-          "en": "Hummus mixed with flavorful Bahraini maabouj.",
-          "ar": "حمص ممزوج بالمعبوج البحريني اللذيذ"
-        },
-        "priceHalalas": 1400,
-        "calories": null,
-        "image": "/images/dish-29.webp"
-      }
-    ]
-  },
-  {
-    "id": "mini",
-    "name": {
-      "en": "Mini appetizers",
-      "ar": "ميني مقبلات"
-    },
-    "subtitle": "Little plates, big flavor",
-    "items": [
-      {
-        "id": "dish-30",
-        "name": {
-          "en": "Onions And Sumac",
-          "ar": "بصل وسماق"
-        },
-        "description": {
-          "en": "White onion with a little olive oil and sumac.",
-          "ar": "بصل أبيض مضاف اليه قليل من زيت الزيتون والسماق"
-        },
-        "priceHalalas": 700,
-        "calories": 120,
-        "image": "/images/dish-30.webp"
-      },
-      {
-        "id": "dish-31",
-        "name": {
-          "en": "Goat Robe",
-          "ar": "روب ماعز"
-        },
-        "description": {
-          "en": "Fresh goat yogurt prepared daily, served with a special blend.",
-          "ar": "روب ماعز طازج يحضر يومياً يقدم مع الخلطة الخاصة"
-        },
-        "priceHalalas": 700,
-        "calories": 150,
-        "image": "/images/dish-31.webp"
-      },
-      {
-        "id": "dish-32",
-        "name": {
-          "en": "Special Tahina With Coriander",
-          "ar": "سبيشل طحينه بالكزبره"
-        },
-        "description": {
-          "en": "Special tahini sauce with olive oil and coriander.",
-          "ar": "خلطة صوص الطحينة الخاصة مضاف لها زيت الزيتون والكزبرة"
-        },
-        "priceHalalas": 700,
-        "calories": 150,
-        "image": "/images/dish-32.webp"
       },
       {
         "id": "dish-33",
         "name": {
-          "en": "Garlic",
-          "ar": "ثوم"
+          "en": "Garlic Sauce",
+          "ar": "ثومية"
         },
         "description": {
-          "en": "A creamy garlic blend.",
-          "ar": "خلطة الثوم الكريمية"
+          "en": "A creamy garlic dip with a bold, savoury flavour.",
+          "ar": "صلصة ثومية كريمية بطعم غني ومميز."
         },
         "priceHalalas": 700,
-        "calories": 390,
+        "calories": 300,
         "image": "/images/dish-33.webp"
       },
       {
-        "id": "dish-34",
+        "id": "menu-9",
         "name": {
-          "en": "Spicy Mabouj Bahraini",
-          "ar": "معبوج بحريني حار"
+          "en": "Muhammara",
+          "ar": "محمّرة"
         },
         "description": {
-          "en": "Spicy Bahraini maabouj with a distinctive flavor.",
-          "ar": "معبوج بحريني حار بنكهة المميزة"
+          "en": "A vibrant roasted red pepper and walnut dip with a touch of pomegranate molasses.",
+          "ar": "غموس من الفلفل الأحمر المشوي والجوز مع لمسة من دبس الرمان."
         },
-        "priceHalalas": 700,
-        "calories": null,
-        "image": "/images/dish-34.webp"
+        "priceHalalas": 0,
+        "calories": 280,
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": "hot-starters",
+    "name": {
+      "en": "Hot starters",
+      "ar": "مقبلات حارة"
+    },
+    "items": [
+      {
+        "id": "dish-15",
+        "name": {
+          "en": "Potato French fries",
+          "ar": "بطاطس مقلي"
+        },
+        "description": {
+          "en": "Golden potato fries, crisp on the outside and fluffy inside.",
+          "ar": "أصابع بطاطس ذهبية ومقرمشة من الخارج وطرية من الداخل."
+        },
+        "priceHalalas": 1200,
+        "calories": 380,
+        "image": "/images/dish-15.webp"
+      },
+      {
+        "id": "menu-11",
+        "name": {
+          "en": "Cheese Sepring roll",
+          "ar": "سبرنغ رول بالجبنة"
+        },
+        "description": {
+          "en": "Crispy pastry rolls filled with melted cheese, served hot.",
+          "ar": "لفائف عجين مقرمشة محشوة بالجبن الذائب وتُقدّم ساخنة."
+        },
+        "priceHalalas": 0,
+        "calories": 320,
+        "image": ""
+      },
+      {
+        "id": "dish-18",
+        "name": {
+          "en": "Spiced Chicken Wings",
+          "ar": "أجنحة دجاج متبلة"
+        },
+        "description": {
+          "en": "Chicken wings seasoned with a savoury spice blend and cooked until golden.",
+          "ar": "أجنحة دجاج متبلة بمزيج من البهارات وتُطهى حتى تصبح ذهبية."
+        },
+        "priceHalalas": 2700,
+        "calories": 430,
+        "image": "/images/dish-18.webp"
+      },
+      {
+        "id": "dish-17",
+        "name": {
+          "en": "Bahraini Potato Harra",
+          "ar": "بطاطا حارة بحرينية"
+        },
+        "description": {
+          "en": "Potatoes tossed with garlic, coriander, chilli and a hint of lemon.",
+          "ar": "بطاطس ممزوجة بالثوم والكزبرة والفلفل الحار ولمسة من الليمون."
+        },
+        "priceHalalas": 1500,
+        "calories": 300,
+        "image": "/images/dish-17.webp"
+      },
+      {
+        "id": "menu-14",
+        "name": {
+          "en": "Grilled Kibbeh on Skewer",
+          "ar": "كبة على السيخ"
+        },
+        "description": {
+          "en": "Traditional kibbeh shaped on a skewer and grilled until lightly crisp outside.",
+          "ar": "كبة تقليدية مشكلة على السيخ ومشوية حتى تصبح مقرمشة قليلاً من الخارج."
+        },
+        "priceHalalas": 0,
+        "calories": 360,
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": "grills",
+    "name": {
+      "en": "Grills",
+      "ar": "مشويات"
+    },
+    "items": [
+      {
+        "id": "dish-3",
+        "name": {
+          "en": "Bahraini Tikka",
+          "ar": "تكة لحم بحرينية"
+        },
+        "description": {
+          "en": "Tender beef cubes marinated with Bahraini spices and grilled over charcoal.",
+          "ar": "مكعبات لحم بقري طرية متبلة بالبهارات البحرينية ومشوية على الفحم."
+        },
+        "priceHalalas": 3400,
+        "calories": 380,
+        "image": "/images/dish-03.webp"
+      },
+      {
+        "id": "dish-4",
+        "name": {
+          "en": "Bahraini Roob Tikka",
+          "ar": "تكة روب بحرينية"
+        },
+        "description": {
+          "en": "Juicy beef tikka marinated in a tangy yoghurt-based Bahraini-style marinade.",
+          "ar": "تكة لحم بقري طرية متبلة بتتبيلة بحرينية من الزبادي والبهارات."
+        },
+        "priceHalalas": 3400,
+        "calories": 400,
+        "image": "/images/dish-04.webp"
+      },
+      {
+        "id": "dish-5",
+        "name": {
+          "en": "Bahraini Loomi Chicken Tikka",
+          "ar": "تِكّة اللومي البحرينية"
+        },
+        "description": {
+          "en": "Chicken pieces marinated with dried lime and aromatic Bahraini spices, then charcoal grilled.",
+          "ar": "قطع دجاج متبلة باللومي والبهارات البحرينية العطرية ثم مشوية على الفحم."
+        },
+        "priceHalalas": 3100,
+        "calories": 320,
+        "image": "/images/dish-05.webp"
+      },
+      {
+        "id": "menu-18",
+        "name": {
+          "en": "Green Herb Chicken Tikka",
+          "ar": "تكة دجاج بالأعشاب الخضراء"
+        },
+        "description": {
+          "en": "Charcoal-grilled chicken tikka marinated with fresh green herbs and spices.",
+          "ar": "تكة دجاج مشوية على الفحم ومتبلّة بالأعشاب الخضراء الطازجة والبهارات."
+        },
+        "priceHalalas": 0,
+        "calories": 300,
+        "image": ""
+      },
+      {
+        "id": "menu-19",
+        "name": {
+          "en": "Spicy Bahraini Chicken Tikka",
+          "ar": "تكة دجاج بحرينية حارة"
+        },
+        "description": {
+          "en": "Chicken tikka with a lively blend of Bahraini spices and chilli heat.",
+          "ar": "تكة دجاج بمزيج غني من البهارات البحرينية ولمسة من الفلفل الحار."
+        },
+        "priceHalalas": 0,
+        "calories": 320,
+        "image": ""
+      },
+      {
+        "id": "menu-20",
+        "name": {
+          "en": "Saffron chicken tikka",
+          "ar": "تكة دجاج بالزعفران"
+        },
+        "description": {
+          "en": "Tender chicken tikka infused with the delicate aroma of saffron.",
+          "ar": "تكة دجاج طرية معطرة برائحة الزعفران الفاخرة."
+        },
+        "priceHalalas": 0,
+        "calories": 330,
+        "image": ""
+      },
+      {
+        "id": "menu-21",
+        "name": {
+          "en": "Creamy Chicken Tikka",
+          "ar": "تكة دجاج كريمية"
+        },
+        "description": {
+          "en": "Juicy chicken tikka in a rich, creamy marinade with mild spices.",
+          "ar": "تكة دجاج طرية بتتبيلة كريمية غنية وبهارات خفيفة."
+        },
+        "priceHalalas": 0,
+        "calories": 370,
+        "image": ""
+      },
+      {
+        "id": "dish-14",
+        "name": {
+          "en": "Grilled whole chicken",
+          "ar": "دجاج مشوي كامل"
+        },
+        "description": {
+          "en": "A whole chicken seasoned with house spices and roasted until golden and juicy.",
+          "ar": "دجاجة كاملة متبلة ببهارات المطعم ومشوية حتى تصبح ذهبية وعصيرية."
+        },
+        "priceHalalas": 3400,
+        "calories": 1100,
+        "image": "/images/dish-14.webp"
+      },
+      {
+        "id": "menu-23",
+        "name": {
+          "en": "Chicken Kebab",
+          "ar": "كباب الدجاج"
+        },
+        "description": {
+          "en": "Seasoned minced chicken kebab grilled on skewers over charcoal.",
+          "ar": "كباب دجاج مفروم ومتبل ومشوي على الأسياخ فوق الفحم."
+        },
+        "priceHalalas": 0,
+        "calories": 320,
+        "image": ""
+      },
+      {
+        "id": "dish-10",
+        "name": {
+          "en": "Lamb Kebab",
+          "ar": "كباب لحم ضأن"
+        },
+        "description": {
+          "en": "Seasoned minced lamb kebab grilled on skewers over charcoal.",
+          "ar": "كباب لحم ضأن مفروم ومتبل ومشوي على الأسياخ فوق الفحم."
+        },
+        "priceHalalas": 3100,
+        "calories": 420,
+        "image": "/images/dish-10.webp"
+      },
+      {
+        "id": "dish-13",
+        "name": {
+          "en": "Lamb Chops",
+          "ar": "ريش غنم"
+        },
+        "description": {
+          "en": "Juicy lamb chops seasoned and grilled over charcoal.",
+          "ar": "ريش لحم ضأن طرية متبلة ومشوية على الفحم."
+        },
+        "priceHalalas": 5400,
+        "calories": 520,
+        "image": "/images/dish-13.webp"
+      },
+      {
+        "id": "menu-26",
+        "name": {
+          "en": "Grilled Luqaimat",
+          "ar": "لقيمات المشوي"
+        },
+        "description": {
+          "en": "Sweet, bite-sized luqaimat prepared in the house style; served as a dessert.",
+          "ar": "لقيمات صغيرة حلوة محضّرة على طريقة المطعم وتُقدّم كحلوى."
+        },
+        "priceHalalas": 0,
+        "calories": 420,
+        "image": ""
+      },
+      {
+        "id": "dish-7",
+        "name": {
+          "en": "Arayes",
+          "ar": "عرايس"
+        },
+        "description": {
+          "en": "Toasted Arabic bread filled with seasoned meat and grilled until crisp.",
+          "ar": "خبز عربي محشو باللحم المتبل ومحمّص على الشواية حتى يصبح مقرمشاً."
+        },
+        "priceHalalas": 2700,
+        "calories": 450,
+        "image": "/images/dish-07.webp"
+      },
+      {
+        "id": "dish-16",
+        "name": {
+          "en": "Zafrani Rice",
+          "ar": "ارز بالزعفران"
+        },
+        "description": {
+          "en": "Fragrant rice delicately flavoured with saffron.",
+          "ar": "أرز عطري متبل بنكهة الزعفران المميزة."
+        },
+        "priceHalalas": 1100,
+        "calories": 330,
+        "image": "/images/dish-16.webp"
+      },
+      {
+        "id": "menu-29",
+        "name": {
+          "en": "Biryani Bahraini",
+          "ar": "برياني بحريني"
+        },
+        "description": {
+          "en": "Bahraini-style biryani rice layered with aromatic spices and tender meat or chicken, according to preparation.",
+          "ar": "أرز برياني على الطريقة البحرينية مع البهارات العطرية واللحم أو الدجاج الطري حسب طريقة التحضير."
+        },
+        "priceHalalas": 0,
+        "calories": 550,
+        "image": ""
+      },
+      {
+        "id": "menu-30",
+        "name": {
+          "en": "Biryani Tikka Masala",
+          "ar": "برياني تكة مسالا"
+        },
+        "description": {
+          "en": "A hearty biryani combining tikka masala flavours with fragrant spiced rice.",
+          "ar": "برياني غني يجمع نكهات تكة المسالا مع الأرز المتبل العطري."
+        },
+        "priceHalalas": 0,
+        "calories": 650,
+        "image": ""
+      },
+      {
+        "id": "menu-31",
+        "name": {
+          "en": "Lamb masala",
+          "ar": "لحم مسالا"
+        },
+        "description": {
+          "en": "Tender lamb cooked in a rich, spiced masala gravy.",
+          "ar": "لحم ضأن طري مطهو في صلصة مسالا غنية بالبهارات."
+        },
+        "priceHalalas": 0,
+        "calories": 480,
+        "image": ""
+      },
+      {
+        "id": "menu-32",
+        "name": {
+          "en": "Butter Chicken",
+          "ar": "دجاج بالزبدة"
+        },
+        "description": {
+          "en": "Chicken simmered in a buttery tomato and cream sauce with gentle spices.",
+          "ar": "دجاج مطهو في صلصة الطماطم والزبدة والكريمة مع بهارات خفيفة."
+        },
+        "priceHalalas": 0,
+        "calories": 520,
+        "image": ""
       }
     ]
   },
   {
     "id": "drinks",
     "name": {
-      "en": "Drinks",
-      "ar": "المشروبات"
+      "en": "Beverages",
+      "ar": "مشروبات"
     },
-    "subtitle": "Something refreshing",
     "items": [
-      {
-        "id": "dish-35",
-        "name": {
-          "en": "Pepsi",
-          "ar": "بيبسي"
-        },
-        "description": {
-          "en": "",
-          "ar": ""
-        },
-        "priceHalalas": 400,
-        "calories": null,
-        "image": "/images/dish-35.webp"
-      },
       {
         "id": "dish-36",
         "name": {
-          "en": "Orange Juice",
-          "ar": "عصير برتقال"
+          "en": "Fresh orange juice",
+          "ar": "عصير برتقال طاجز"
         },
         "description": {
-          "en": "Fresh orange juice prepared daily.",
-          "ar": "عصير برتقال طازج يحضر يومياً"
+          "en": "Freshly squeezed orange juice.",
+          "ar": "عصير برتقال طازج ومعصور عند الطلب."
         },
         "priceHalalas": 1100,
-        "calories": 100,
+        "calories": 130,
         "image": "/images/dish-36.webp"
       },
       {
-        "id": "dish-37",
+        "id": "menu-34",
         "name": {
-          "en": "Pomegranate Juice",
-          "ar": "عصير رمان"
+          "en": "Apple Juice",
+          "ar": "تفاح"
         },
         "description": {
-          "en": "Fresh pomegranate juice prepared daily.",
-          "ar": "عصير رمان طازج يحضر يومياً"
+          "en": "Refreshing apple juice.",
+          "ar": "عصير تفاح منعش."
         },
-        "priceHalalas": 1100,
-        "calories": 120,
-        "image": "/images/dish-37.webp"
+        "priceHalalas": 0,
+        "calories": 140,
+        "image": ""
       },
       {
-        "id": "dish-38",
+        "id": "menu-35",
         "name": {
-          "en": "Cure Juice",
-          "ar": "كيور (شمندر - برتقال - جزر)"
+          "en": "Mango",
+          "ar": "مانجو"
         },
         "description": {
-          "en": "A fresh blend of beetroot, orange, and carrot, prepared daily.",
-          "ar": "عصير كيور خليط من الشمندر والبرتقال والجزر الطازج يحضر يومياً"
+          "en": "Sweet, refreshing mango juice.",
+          "ar": "عصير مانجو حلو ومنعش."
         },
-        "priceHalalas": 1100,
-        "calories": 80,
-        "image": "/images/dish-38.webp"
+        "priceHalalas": 0,
+        "calories": 190,
+        "image": ""
       },
       {
-        "id": "dish-39",
+        "id": "menu-36",
         "name": {
-          "en": "Diet Pepsi",
-          "ar": "بيبسي دايت"
+          "en": "Cocktail",
+          "ar": "كوكتيل"
         },
         "description": {
-          "en": "",
-          "ar": ""
+          "en": "A refreshing mixed-fruit juice blend.",
+          "ar": "مزيج منعش من عصائر الفواكه المشكلة."
         },
-        "priceHalalas": 400,
-        "calories": null,
-        "image": "/images/dish-39.webp"
+        "priceHalalas": 0,
+        "calories": 180,
+        "image": ""
+      },
+      {
+        "id": "menu-37",
+        "name": {
+          "en": "Strawberry",
+          "ar": "فراولة"
+        },
+        "description": {
+          "en": "Sweet and refreshing strawberry juice.",
+          "ar": "عصير فراولة حلو ومنعش."
+        },
+        "priceHalalas": 0,
+        "calories": 160,
+        "image": ""
+      },
+      {
+        "id": "menu-38",
+        "name": {
+          "en": "Mojito strwberry",
+          "ar": "موهيتو فراولة"
+        },
+        "description": {
+          "en": "A sparkling strawberry mojito with mint, lime and soda.",
+          "ar": "موهيتو فراولة منعش مع النعناع والليمون والصودا."
+        },
+        "priceHalalas": 0,
+        "calories": 150,
+        "image": ""
+      },
+      {
+        "id": "menu-39",
+        "name": {
+          "en": "Mojito",
+          "ar": "موهيتو"
+        },
+        "description": {
+          "en": "A refreshing mint and lime mojito with sparkling soda.",
+          "ar": "موهيتو منعش بالنعناع والليمون والصودا."
+        },
+        "priceHalalas": 0,
+        "calories": 100,
+        "image": ""
+      },
+      {
+        "id": "menu-40",
+        "name": {
+          "en": "Saudi Champaign",
+          "ar": "سعودي شامبين"
+        },
+        "description": {
+          "en": "A fizzy Saudi-style citrus drink with a refreshing fruity flavour.",
+          "ar": "مشروب سعودي فوّار بنكهة الحمضيات والفواكه المنعشة."
+        },
+        "priceHalalas": 0,
+        "calories": 160,
+        "image": ""
+      },
+      {
+        "id": "menu-41",
+        "name": {
+          "en": "Coca Cola",
+          "ar": "كوكا كولا"
+        },
+        "description": {
+          "en": "Classic Coca-Cola soft drink.",
+          "ar": "مشروب كوكاكولا الغازي الكلاسيكي."
+        },
+        "priceHalalas": 0,
+        "calories": 140,
+        "image": ""
+      },
+      {
+        "id": "menu-42",
+        "name": {
+          "en": "Sprite",
+          "ar": "سبرايت"
+        },
+        "description": {
+          "en": "Refreshing lemon-lime soft drink.",
+          "ar": "مشروب غازي منعش بنكهة الليمون واللايم."
+        },
+        "priceHalalas": 0,
+        "calories": 140,
+        "image": ""
       },
       {
         "id": "dish-40",
         "name": {
-          "en": "Mirinda Orange",
+          "en": "Mirinda",
           "ar": "ميرندا برتقال"
         },
         "description": {
-          "en": "",
-          "ar": ""
+          "en": "Orange-flavoured fizzy soft drink.",
+          "ar": "مشروب غازي فوّار بنكهة البرتقال."
         },
         "priceHalalas": 400,
-        "calories": null,
+        "calories": 150,
         "image": "/images/dish-40.webp"
-      },
-      {
-        "id": "dish-41",
-        "name": {
-          "en": "Mirinda Citrus",
-          "ar": "ميرندا حمضيات"
-        },
-        "description": {
-          "en": "",
-          "ar": ""
-        },
-        "priceHalalas": 400,
-        "calories": null,
-        "image": "/images/dish-41.webp"
-      },
-      {
-        "id": "dish-42",
-        "name": {
-          "en": "سفن اب",
-          "ar": "7Up"
-        },
-        "description": {
-          "en": "7Up.",
-          "ar": "7Up"
-        },
-        "priceHalalas": 400,
-        "calories": null,
-        "image": "/images/dish-42.webp"
       },
       {
         "id": "dish-43",
         "name": {
-          "en": "Water",
-          "ar": "ماء"
+          "en": "Small water glass",
+          "ar": "ماء صغير زجاج"
         },
         "description": {
-          "en": "Water.",
-          "ar": "ماء"
+          "en": "Small serving of drinking water.",
+          "ar": "عبوة مياه شرب صغيرة."
         },
         "priceHalalas": 200,
-        "calories": null,
+        "calories": 0,
         "image": "/images/dish-43.webp"
       },
       {
-        "id": "dish-44",
+        "id": "menu-45",
         "name": {
-          "en": "Diet Seven Up",
-          "ar": "سفن اب دايت"
+          "en": "Big water Glass",
+          "ar": "ماء كبير زجاج"
         },
         "description": {
-          "en": "",
-          "ar": ""
+          "en": "Large serving of drinking water.",
+          "ar": "عبوة مياه شرب كبيرة."
         },
-        "priceHalalas": 400,
-        "calories": null,
-        "image": "/images/dish-44.webp"
-      },
-      {
-        "id": "dish-45",
-        "name": {
-          "en": "شوبيس زنجبيل",
-          "ar": "Schweppes ginger ail"
-        },
-        "description": {
-          "en": "Schweppes ginger ale.",
-          "ar": "Schweppes ginger ail"
-        },
-        "priceHalalas": 500,
-        "calories": null,
-        "image": "/images/dish-45.webp"
+        "priceHalalas": 0,
+        "calories": 0,
+        "image": ""
       }
     ]
   }

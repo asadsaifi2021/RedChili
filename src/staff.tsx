@@ -20,15 +20,16 @@ export function Staff({ lang }: { lang: Lang }) {
     if (!db) return;
     const { data: { session } } = await db.auth.getSession();
     if (!session) { setRole(null); setFactor(''); setSetup(null); setStage('login'); return; }
-    const { data, error } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
-    if (error) { setStage('unavailable'); return; }
-    if (data.currentLevel === 'aal2') {
-      const { data: granted, error: roleError } = await db.rpc('staff_role');
-      setRole(granted === 'admin' || granted === 'cashier' ? granted : null);
-      setStage(roleError ? 'unavailable' : granted ? 'ready' : 'denied');
+    const { data: granted, error: roleError } = await db.rpc('staff_role');
+    if (roleError) { setStage('unavailable'); return; }
+    if (granted === 'admin' || granted === 'cashier') {
+      setRole(granted);
+      setStage('ready');
       return;
     }
     setRole(null);
+    const { data: required, error: policyError } = await db.rpc('staff_login_policy');
+    if (policyError || required !== true) { setStage(policyError ? 'unavailable' : 'denied'); return; }
     const { data: factors, error: factorError } = await db.auth.mfa.listFactors();
     if (factorError) { setStage('unavailable'); return; }
     const verified = factors.totp[0];
@@ -83,10 +84,13 @@ export function Staff({ lang }: { lang: Lang }) {
     <div className="staff-nav"><nav className="chips">
       <button className={screen === 'orders' || role === 'cashier' ? 'active' : ''} onClick={() => setScreen('orders')}>{t('الطلبات', 'Orders')}</button>
       {role === 'admin' && <><button className={screen === 'menu' ? 'active' : ''} onClick={() => setScreen('menu')}>{t('إدارة القائمة', 'Menu admin')}</button>
-        <button className={screen === 'tables' ? 'active' : ''} onClick={() => setScreen('tables')}>{t('الطاولات ورموز QR', 'Tables and QR codes')}</button></>}
+        <button className={screen === 'tables' ? 'active' : ''} onClick={() => setScreen('tables')}>{t('الطاولات ورموز QR', 'Tables and QR codes')}</button>
+        <button className={screen === 'users' ? 'active' : ''} onClick={() => setScreen('users')}>{t('حسابات الموظفين', 'Staff accounts')}</button></>}
     </nav><button className="outline" onClick={() => void db?.auth.signOut()}>{t('تسجيل الخروج', 'Sign out')}</button></div>
     {role === 'admin' && screen === 'menu' ? <MenuAdmin lang={lang} t={t} />
-      : role === 'admin' && screen === 'tables' ? <TableAdmin t={t} /> : <Orders lang={lang} t={t} />}
+      : role === 'admin' && screen === 'tables' ? <TableAdmin t={t} />
+      : role === 'admin' && screen === 'users' ? <StaffAccounts t={t} onPolicyChange={inspect} />
+      : <Orders lang={lang} t={t} />}
   </main>;
 
   return <main className="shell staff-shell"><section className="panel signin">
@@ -111,6 +115,70 @@ export function Staff({ lang }: { lang: Lang }) {
     {message && <p role="alert" className="notice">{message}</p>}
     {!['loading', 'login'].includes(stage) && <button className="plain" onClick={() => void db?.auth.signOut()}>{t('تسجيل الخروج', 'Sign out')}</button>}
   </section></main>;
+}
+
+type StaffAccount = { id: string; email: string; role: Role; require_mfa: boolean };
+
+function StaffAccounts({ t, onPolicyChange }: { t: Translate; onPolicyChange: () => Promise<void> }) {
+  const [accounts, setAccounts] = useState<StaffAccount[]>([]);
+  const [busy, setBusy] = useState(true);
+  const [failed, setFailed] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const refresh = useCallback(async () => {
+    if (!db) return;
+    const { data, error } = await db.functions.invoke<{ accounts: StaffAccount[] }>('staff-management', { body: { action: 'list' } });
+    if (error || !data) throw error ?? Error('list_failed');
+    setAccounts(data.accounts);
+  }, []);
+  useEffect(() => {
+    void refresh().catch(() => setFailed(true)).finally(() => setBusy(false));
+  }, [refresh]);
+
+  async function submit(body: object, form?: HTMLFormElement) {
+    if (!db || busy) return;
+    setBusy(true);
+    setFailed(false);
+    setSaved(false);
+    try {
+      const { error } = await db.functions.invoke('staff-management', { body });
+      if (error) throw error;
+      form?.reset();
+      await onPolicyChange();
+      await refresh();
+      setSaved(true);
+    } catch {
+      setFailed(true);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return <section>
+    <h1>{t('حسابات الموظفين', 'Staff accounts')}</h1>
+    <form className="panel" onSubmit={event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const fields = new FormData(form);
+      void submit({ action: 'create', email: fields.get('email'), password: fields.get('password'),
+        role: fields.get('role'), require_mfa: fields.has('mfa') }, form);
+    }}>
+      <h2>{t('إنشاء حساب', 'Create an account')}</h2>
+      <label>{t('البريد الإلكتروني', 'Email')}<input type="email" name="email" required dir="ltr" /></label>
+      <label>{t('كلمة المرور', 'Password')}<input type="password" name="password" required minLength={12} autoComplete="new-password" /></label>
+      <label>{t('الصلاحية', 'Role')}<select name="role"><option value="cashier">{t('أمين الصندوق', 'Cashier')}</option><option value="admin">{t('مدير', 'Admin')}</option></select></label>
+      <label className="checkbox"><input type="checkbox" name="mfa" />{t('طلب رمز المصادقة', 'Require an authenticator code')}</label>
+      <button className="primary" disabled={busy}>{t('إنشاء الحساب', 'Create account')}</button>
+    </form>
+    {failed && <p role="alert">{t('تعذر حفظ الحسابات أو تحميلها. تحقق من البيانات وحاول مجددًا.', 'Could not save or load accounts. Check the details and try again.')}</p>}
+    {saved && <p role="status">{t('تم الحفظ.', 'Saved.')}</p>}
+    <div className="admin-list">{accounts.map(account => <article className="admin-row" key={account.id}>
+      <div><strong dir="ltr">{account.email}</strong><small>{account.role === 'admin' ? t('مدير', 'Admin') : t('أمين الصندوق', 'Cashier')}</small></div>
+      <label className="checkbox"><input type="checkbox" checked={account.require_mfa} disabled={busy}
+        onChange={event => void submit({ action: 'mfa', id: account.id, require_mfa: event.target.checked })} />
+        {t('المصادقة الثنائية', 'Require 2FA')}</label>
+    </article>)}</div>
+    <p>{t('يمكن للموظفين استخدام Google Authenticator أو Microsoft Authenticator.', 'Staff can use Google Authenticator or Microsoft Authenticator.')}</p>
+  </section>;
 }
 
 function Orders({ lang, t }: { lang: Lang; t: Translate }) {
