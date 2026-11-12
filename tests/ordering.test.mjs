@@ -85,5 +85,11 @@ test('QR checkout, staff authorization, revisioned ticket and combined payment',
     assert.equal(paidReceipt.status, 'paid');
     assert.equal(paidReceipt.total, 10200);
     assert.deepEqual(Object.keys(paidReceipt).sort(), ['items', 'number', 'status', 'table_label', 'total']);
+    await db.exec('reset role');
+    await db.exec(readFileSync('supabase/migrations/202611120004_menu_prices.sql', 'utf8'));
+    await db.exec('set role anon');
+    assert.equal((await db.query('select id from public.menu_items where published and available and price > 0')).rows.length, 45);
+    const soup = await submit(randomUUID(), JSON.stringify([{ id: 'menu-1', quantity: 1, price: 1600 }]));
+    assert.ok(soup.rows[0].number);
   } finally { await db.close(); }
 });

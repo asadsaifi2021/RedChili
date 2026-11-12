@@ -16,7 +16,7 @@
           "en": "A comforting blend of red lentils, onions and mild spices, simmered until smooth.",
           "ar": "شوربة دافئة من العدس الأحمر والبصل والبهارات الخفيفة، تُطهى حتى تصبح ناعمة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1600,
         "calories": 180,
         "image": "/images/illustrated-menu-1.webp"
       },
@@ -30,7 +30,7 @@
           "en": "Creamy mushroom soup prepared with mushrooms, cream and gentle seasoning.",
           "ar": "شوربة كريمية محضّرة بالفطر والكريمة والتوابل الخفيفة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1900,
         "calories": 240,
         "image": "/images/illustrated-menu-2.webp"
       }
@@ -53,7 +53,7 @@
           "en": "A fresh parsley salad with bulgur, tomatoes, mint, lemon and olive oil.",
           "ar": "سلطة بقدونس طازجة مع البرغل والطماطم والنعناع والليمون وزيت الزيتون."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1500,
         "calories": 220,
         "image": "/images/illustrated-menu-3.webp"
       },
@@ -81,7 +81,7 @@
           "en": "A crisp mix of lettuce, tomatoes, cucumber, toasted bread and tangy sumac dressing.",
           "ar": "مزيج مقرمش من الخس والطماطم والخيار والخبز المحمّص وتتبيلة السماق."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1500,
         "calories": 230,
         "image": "/images/illustrated-menu-5.webp"
       }
@@ -146,7 +146,7 @@
           "en": "A vibrant roasted red pepper and walnut dip with a touch of pomegranate molasses.",
           "ar": "غموس من الفلفل الأحمر المشوي والجوز مع لمسة من دبس الرمان."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1500,
         "calories": 280,
         "image": "/images/illustrated-menu-9.webp"
       }
@@ -183,7 +183,7 @@
           "en": "Crispy pastry rolls filled with melted cheese, served hot.",
           "ar": "لفائف عجين مقرمشة محشوة بالجبن الذائب وتُقدّم ساخنة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1600,
         "calories": 320,
         "image": "/images/illustrated-menu-11.webp"
       },
@@ -225,7 +225,7 @@
           "en": "Traditional kibbeh shaped on a skewer and grilled until lightly crisp outside.",
           "ar": "كبة تقليدية مشكلة على السيخ ومشوية حتى تصبح مقرمشة قليلاً من الخارج."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 2400,
         "calories": 360,
         "image": "/images/illustrated-menu-14.webp"
       }
@@ -290,7 +290,7 @@
           "en": "Charcoal-grilled chicken tikka marinated with fresh green herbs and spices.",
           "ar": "تكة دجاج مشوية على الفحم ومتبلّة بالأعشاب الخضراء الطازجة والبهارات."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 3100,
         "calories": 300,
         "image": "/images/illustrated-menu-18.webp"
       },
@@ -304,7 +304,7 @@
           "en": "Chicken tikka with a lively blend of Bahraini spices and chilli heat.",
           "ar": "تكة دجاج بمزيج غني من البهارات البحرينية ولمسة من الفلفل الحار."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 3100,
         "calories": 320,
         "image": "/images/illustrated-menu-19.webp"
       },
@@ -318,7 +318,7 @@
           "en": "Tender chicken tikka infused with the delicate aroma of saffron.",
           "ar": "تكة دجاج طرية معطرة برائحة الزعفران الفاخرة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 3300,
         "calories": 330,
         "image": "/images/illustrated-menu-20.webp"
       },
@@ -332,7 +332,7 @@
           "en": "Juicy chicken tikka in a rich, creamy marinade with mild spices.",
           "ar": "تكة دجاج طرية بتتبيلة كريمية غنية وبهارات خفيفة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 3300,
         "calories": 370,
         "image": "/images/illustrated-menu-21.webp"
       },
@@ -360,7 +360,7 @@
           "en": "Seasoned minced chicken kebab grilled on skewers over charcoal.",
           "ar": "كباب دجاج مفروم ومتبل ومشوي على الأسياخ فوق الفحم."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 2900,
         "calories": 320,
         "image": "/images/illustrated-menu-23.webp"
       },
@@ -402,7 +402,7 @@
           "en": "Sweet, bite-sized luqaimat prepared in the house style; served as a dessert.",
           "ar": "لقيمات صغيرة حلوة محضّرة على طريقة المطعم وتُقدّم كحلوى."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1400,
         "calories": 420,
         "image": "/images/illustrated-menu-26.webp"
       },
@@ -444,7 +444,7 @@
           "en": "Bahraini-style biryani rice layered with aromatic spices and tender meat or chicken, according to preparation.",
           "ar": "أرز برياني على الطريقة البحرينية مع البهارات العطرية واللحم أو الدجاج الطري حسب طريقة التحضير."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 3800,
         "calories": 550,
         "image": "/images/illustrated-menu-29.webp"
       },
@@ -458,7 +458,7 @@
           "en": "A hearty biryani combining tikka masala flavours with fragrant spiced rice.",
           "ar": "برياني غني يجمع نكهات تكة المسالا مع الأرز المتبل العطري."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 3700,
         "calories": 650,
         "image": "/images/illustrated-menu-30.webp"
       },
@@ -472,7 +472,7 @@
           "en": "Tender lamb cooked in a rich, spiced masala gravy.",
           "ar": "لحم ضأن طري مطهو في صلصة مسالا غنية بالبهارات."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 4500,
         "calories": 480,
         "image": "/images/illustrated-menu-31.webp"
       },
@@ -486,7 +486,7 @@
           "en": "Chicken simmered in a buttery tomato and cream sauce with gentle spices.",
           "ar": "دجاج مطهو في صلصة الطماطم والزبدة والكريمة مع بهارات خفيفة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 3600,
         "calories": 520,
         "image": "/images/illustrated-menu-32.webp"
       }
@@ -523,7 +523,7 @@
           "en": "Refreshing apple juice.",
           "ar": "عصير تفاح منعش."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1100,
         "calories": 140,
         "image": "/images/illustrated-menu-34.webp"
       },
@@ -537,7 +537,7 @@
           "en": "Sweet, refreshing mango juice.",
           "ar": "عصير مانجو حلو ومنعش."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1200,
         "calories": 190,
         "image": "/images/illustrated-menu-35.webp"
       },
@@ -551,7 +551,7 @@
           "en": "A refreshing mixed-fruit juice blend.",
           "ar": "مزيج منعش من عصائر الفواكه المشكلة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1300,
         "calories": 180,
         "image": "/images/illustrated-menu-36.webp"
       },
@@ -565,7 +565,7 @@
           "en": "Sweet and refreshing strawberry juice.",
           "ar": "عصير فراولة حلو ومنعش."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1200,
         "calories": 160,
         "image": "/images/illustrated-menu-37.webp"
       },
@@ -579,7 +579,7 @@
           "en": "A sparkling strawberry mojito with mint, lime and soda.",
           "ar": "موهيتو فراولة منعش مع النعناع والليمون والصودا."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1600,
         "calories": 150,
         "image": "/images/illustrated-menu-38.webp"
       },
@@ -593,7 +593,7 @@
           "en": "A refreshing mint and lime mojito with sparkling soda.",
           "ar": "موهيتو منعش بالنعناع والليمون والصودا."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1500,
         "calories": 100,
         "image": "/images/illustrated-menu-39.webp"
       },
@@ -607,7 +607,7 @@
           "en": "A fizzy Saudi-style citrus drink with a refreshing fruity flavour.",
           "ar": "مشروب سعودي فوّار بنكهة الحمضيات والفواكه المنعشة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 1500,
         "calories": 160,
         "image": "/images/illustrated-menu-40.webp"
       },
@@ -621,7 +621,7 @@
           "en": "Classic Coca-Cola soft drink.",
           "ar": "مشروب كوكاكولا الغازي الكلاسيكي."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 400,
         "calories": 140,
         "image": "/images/illustrated-menu-41.webp"
       },
@@ -635,7 +635,7 @@
           "en": "Refreshing lemon-lime soft drink.",
           "ar": "مشروب غازي منعش بنكهة الليمون واللايم."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 400,
         "calories": 140,
         "image": "/images/illustrated-menu-42.webp"
       },
@@ -677,7 +677,7 @@
           "en": "Large serving of drinking water.",
           "ar": "عبوة مياه شرب كبيرة."
         },
-        "priceHalalas": 0,
+        "priceHalalas": 400,
         "calories": 0,
         "image": "/images/illustrated-menu-45.webp"
       }
