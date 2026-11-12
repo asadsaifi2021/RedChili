@@ -18,13 +18,8 @@ function App() {
   return <>
     <a className="skip-link" href={staff ? '#staff-main' : '#menu'}>{lang === 'ar' ? 'تخطّ إلى المحتوى' : 'Skip to content'}</a>
     <header className="site-head"><div className="shell head-inner">
-      <a className="brand" href={staff ? '/' : location.pathname + location.search}><img src="/logo.jpg" alt="" width="48" height="48" /><span>Red Chili<small lang="ar">رد تشيلي</small></span></a>
-      {landing && <nav className="site-nav" aria-label={lang === 'ar' ? 'التنقل الرئيسي' : 'Main navigation'}>
-        <a href="#signatures">{lang === 'ar' ? 'أطباقنا المميزة' : 'Signatures'}</a>
-        <a href="#menu">{lang === 'ar' ? 'القائمة' : 'Menu'}</a>
-        <a href="#gallery">{lang === 'ar' ? 'الصور' : 'Gallery'}</a>
-      </nav>}
-      <div className="head-actions"><a href={staff ? '/' : '/staff'}>{staff ? (lang === 'ar' ? 'القائمة' : 'Menu') : (lang === 'ar' ? 'الموظفون' : 'Staff')}</a>
+      <a className="brand" href={staff ? '/' : location.pathname + location.search}><img src="/logo-kanz.png" alt={lang === 'ar' ? 'كنز' : 'Kanz'} width="96" height="48" /></a>
+      <div className="head-actions">{landing && <a className="header-menu" href="#menu">{lang === 'ar' ? 'القائمة' : 'Our menu'}</a>}<a href={staff ? '/' : '/staff'}>{staff ? (lang === 'ar' ? 'القائمة' : 'Menu') : (lang === 'ar' ? 'الموظفون' : 'Staff')}</a>
         <button className="outline" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>{lang === 'ar' ? 'English' : 'العربية'}</button></div>
     </div></header>
     {staff ? <div id="staff-main" tabIndex={-1}>

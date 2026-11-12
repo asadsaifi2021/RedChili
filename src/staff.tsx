@@ -67,7 +67,7 @@ export function Staff({ lang }: { lang: Lang }) {
           const { error } = await db.auth.mfa.unenroll({ factorId: existing.id });
           if (error) throw error;
         }
-        const { data, error } = await db.auth.mfa.enroll({ factorType: 'totp', issuer: 'RedChili' });
+        const { data, error } = await db.auth.mfa.enroll({ factorType: 'totp', issuer: 'Kanz' });
         if (error) throw error;
         setFactor(data.id); setSetup({ qr: data.totp.qr_code, secret: data.totp.secret }); setStage('verify');
       } else if (stage === 'verify') {
@@ -309,7 +309,7 @@ function Orders({ lang, t }: { lang: Lang; t: Translate }) {
       <button className="primary full" disabled={busy} onClick={() => void pay()}>{t('تم استلام المبلغ', 'Confirm payment received')}</button>
     </Dialog>}
     {ticket && <Dialog label={t('إغلاق التذكرة', 'Close ticket')} close={() => setTicket(null)}>
-      <div className="print-target ticket" dir="rtl"><h2>RedChili</h2><h3>تذكرة المطبخ / Kitchen ticket</h3>
+      <div className="print-target ticket" dir="rtl"><h2>Kanz</h2><h3>تذكرة المطبخ / Kitchen ticket</h3>
         <p>طاولة {ticket.table_label} · #{ticket.number} · {date(ticket.created_at, 'ar')}</p>
         <p>{ticket.cancelled_at ? 'طلب ملغى / Cancelled order' : ticket.revision > 1 ? 'طلب محدّث / Updated order' : 'طلب / Order'} · {ticket.revision}</p>
         {ticket.items.map(line => <div className="ticket-line" key={line.id}><strong>{line.quantity} × {line.name_ar}</strong>
@@ -432,7 +432,7 @@ function TableAdmin({ t }: { t: Translate }) {
           if (window.confirm(t('سيصبح الرمز القديم غير صالح. هل تريد استبداله؟', 'Replace this QR code? The old code will stop working.'))) void change({ token: crypto.randomUUID() }, table.id);
         }}>{t('استبدال الرمز', 'Replace QR')}</button></div></article>)}</div>
     {qr && <Dialog label={t('إغلاق الرمز', 'Close QR')} close={() => setQr(null)}>
-      <div className="print-target qr-card"><img className="qr-logo" src="/logo.jpg" alt="RedChili" /><h2>{t('طاولة', 'Table')} {qr.label}</h2>
+      <div className="print-target qr-card"><img className="qr-logo" src="/logo-kanz.png" alt="Kanz" /><h2>{t('طاولة', 'Table')} {qr.label}</h2>
         <img className="qr" src={qr.image} alt={t('رمز طلب الطاولة', 'Table ordering QR')} /><p>امسح الرمز للطلب · Scan to order</p></div>
       <div className="actions"><button className="primary" onClick={() => window.print()}>{t('طباعة الرمز', 'Print QR')}</button>
         <a href={qr.url} target="_blank" rel="noreferrer">{t('فتح رابط الطاولة', 'Open table link')}</a></div>

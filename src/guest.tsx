@@ -211,7 +211,7 @@ export function Guest({ lang }: { lang: Lang }) {
       <div className="shell hero-inner">
         <div className="hero-copy">
           {token === null && <p className="theme-eyebrow">{t('نكهة عربية على الفحم', 'ARABIC SOUL. CHARCOAL FIRE.')}</p>}
-          <h1>{table ? t(`طاولة ${table}`, `Table ${table}`) : token !== null ? t('قائمة رد تشيلي', 'Red Chili menu') :
+          <h1>{table ? t(`طاولة ${table}`, `Table ${table}`) : token !== null ? t('قائمة كنز', 'Kanz menu') :
             <>{t('أكل طيب.', 'Good food.')}<br /><em>{t('وصحبة أجمل.', 'Great company.')}</em></>}</h1>
           <p>{table ? t('اختر أطباقك وأرسل طلبك إلى الكاشير.', 'Choose your dishes and send your order to the cashier.')
             : token !== null ? t('للطلب، امسح رمز QR الموجود على طاولتك.', 'To order, scan the QR code on your table.')
@@ -224,18 +224,9 @@ export function Guest({ lang }: { lang: Lang }) {
         </figure>}
       </div>
     </section>
-    {token === null && <section className="shell signatures" id="signatures">
-      {signatures.length > 0 && <>
-        <h2>{t('أطباقنا المميزة', 'Signature dishes')}</h2>
-        <div className="signature-grid">{signatures.map(item => <button className="signature-card" key={item.id} onClick={() => openDish(item)}>
-          <img src={photo(item.photo)} loading="lazy" alt="" />
-          <span><strong>{name(item, lang)}</strong><small>{money(item.price, lang)}</small></span>
-        </button>)}</div>
-      </>}
-    </section>}
     <div className="shell menu-shell ordering-layout" id="menu" tabIndex={-1}>
       <div className="menu-content">
-      {token === null && <h2 className="menu-title">{t('القائمة', 'The menu')}</h2>}
+      {token === null && <div className="theme-menu-heading"><h2 className="menu-title">{t('اعثر على طبقك المفضل.', 'Find your next favorite.')}</h2>{loaded && !loadFailed && <span>{t(`${menu.length} طبقًا`, `${menu.length} dishes`)}</span>}</div>}
       {token !== null && !table && <p role="status" className="notice">{checkingTable
         ? t('جارٍ التحقق من الطاولة…', 'Checking your table…')
         : t('امسح رمز الطاولة مرة أخرى أو افتح القائمة.', 'Scan your table QR code again or open the regular menu.')}
@@ -271,9 +262,18 @@ export function Guest({ lang }: { lang: Lang }) {
         {receipt && <button className="outline full" onClick={() => setReceiptOpen(true)}>{t('آخر طلب', 'Last order')} #{receipt.number}</button>}
       </aside>}
     </div>
+    {token === null && <section className="shell signatures" id="signatures">
+      {signatures.length > 0 && <>
+        <h2>{t('أطباقنا المميزة', 'Signature dishes')}</h2>
+        <div className="signature-grid">{signatures.map(item => <button className="signature-card" key={item.id} onClick={() => openDish(item)}>
+          <img src={photo(item.photo)} loading="lazy" alt="" />
+          <span><strong>{name(item, lang)}</strong><small>{money(item.price, lang)}</small></span>
+        </button>)}</div>
+      </>}
+    </section>}
     {token === null && <section className="gallery" id="gallery">
       {gallery.length > 0 && <div className="shell">
-        <h2>{t('من مطبخ رد تشيلي', 'From the Red Chili kitchen')}</h2>
+        <h2>{t('من مطبخ كنز', 'From the Kanz kitchen')}</h2>
         <div className="gallery-grid">{gallery.map(item => <button className="gallery-card" key={item.id} onClick={() => openDish(item)}>
           <img src={photo(item.photo)} loading="lazy" alt="" /><span>{name(item, lang)}</span>
         </button>)}</div>
