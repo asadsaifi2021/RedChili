@@ -244,7 +244,9 @@ export function Guest({ lang }: { lang: Lang }) {
         const items = matching.filter(item => item.category === group.id);
         return items.length > 0 && <section key={group.id} className="menu-group"><h2>{group.name[lang]}</h2>
           <div className="dish-grid">{items.map(item => <button key={item.id} className="dish" onClick={() => openDish(item)}>
-            <div className="dish-media">{photo(item.photo) ? <img loading="lazy" src={photo(item.photo)} alt="" /> : <div className="dish-placeholder" />}</div>
+            <div className="dish-media">{photo(item.photo) ? <img loading="lazy" src={photo(item.photo)} alt="" /> : <div className="dish-placeholder" />}
+              {item.photo.startsWith('/images/illustrated-') && <span className="illustration-label">{t('صورة توضيحية', 'Illustrative image')}</span>}
+            </div>
             <div className="dish-copy"><h3>{name(item, lang)}</h3>{item[`description_${lang}`] && <p>{item[`description_${lang}`]}</p>}
               <div className="dish-meta"><strong>{item.price > 0 ? money(item.price, lang) : t('السعر قريبًا', 'Price pending')}</strong>{!item.available && item.price > 0 && <span className="sold-out">{t('غير متاح', 'Sold out')}</span>}<span className="dish-arrow" aria-hidden="true">{lang === 'ar' ? '↖' : '↗'}</span></div>
             </div>
@@ -286,6 +288,7 @@ export function Guest({ lang }: { lang: Lang }) {
     </aside>}
     {detail && <Dialog label={t('إغلاق تفاصيل الطبق', 'Close dish details')} close={() => setDetail(null)}>
       {photo(detail.photo) && <img className="detail-image" src={photo(detail.photo)} alt={name(detail, lang)} />}
+      {detail.photo.startsWith('/images/illustrated-') && <small>{t('صورة توضيحية', 'Illustrative image')}</small>}
       <h2>{name(detail, lang)}</h2><p>{detail[`description_${lang}`]}</p>
       <p><strong>{detail.price > 0 ? money(detail.price, lang) : t('السعر قريبًا', 'Price pending')}</strong>{detail.calories !== null && ` · ${detail.calories} ${t('سعرة حرارية', 'kcal')}`}</p>
       {detail.prep_minutes !== null && <p>{t('وقت التحضير', 'Preparation time')} · {detail.prep_minutes} {t('دقيقة', 'min')}</p>}

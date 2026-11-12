@@ -18,7 +18,7 @@
         },
         "priceHalalas": 0,
         "calories": 180,
-        "image": ""
+        "image": "/images/illustrated-menu-1.webp"
       },
       {
         "id": "menu-2",
@@ -32,7 +32,7 @@
         },
         "priceHalalas": 0,
         "calories": 240,
-        "image": ""
+        "image": "/images/illustrated-menu-2.webp"
       }
     ]
   },
@@ -55,7 +55,7 @@
         },
         "priceHalalas": 0,
         "calories": 220,
-        "image": ""
+        "image": "/images/illustrated-menu-3.webp"
       },
       {
         "id": "dish-22",
@@ -83,7 +83,7 @@
         },
         "priceHalalas": 0,
         "calories": 230,
-        "image": ""
+        "image": "/images/illustrated-menu-5.webp"
       }
     ]
   },
@@ -148,7 +148,7 @@
         },
         "priceHalalas": 0,
         "calories": 280,
-        "image": ""
+        "image": "/images/illustrated-menu-9.webp"
       }
     ]
   },
@@ -185,7 +185,7 @@
         },
         "priceHalalas": 0,
         "calories": 320,
-        "image": ""
+        "image": "/images/illustrated-menu-11.webp"
       },
       {
         "id": "dish-18",
@@ -227,7 +227,7 @@
         },
         "priceHalalas": 0,
         "calories": 360,
-        "image": ""
+        "image": "/images/illustrated-menu-14.webp"
       }
     ]
   },
@@ -292,7 +292,7 @@
         },
         "priceHalalas": 0,
         "calories": 300,
-        "image": ""
+        "image": "/images/illustrated-menu-18.webp"
       },
       {
         "id": "menu-19",
@@ -306,7 +306,7 @@
         },
         "priceHalalas": 0,
         "calories": 320,
-        "image": ""
+        "image": "/images/illustrated-menu-19.webp"
       },
       {
         "id": "menu-20",
@@ -320,7 +320,7 @@
         },
         "priceHalalas": 0,
         "calories": 330,
-        "image": ""
+        "image": "/images/illustrated-menu-20.webp"
       },
       {
         "id": "menu-21",
@@ -334,7 +334,7 @@
         },
         "priceHalalas": 0,
         "calories": 370,
-        "image": ""
+        "image": "/images/illustrated-menu-21.webp"
       },
       {
         "id": "dish-14",
@@ -362,7 +362,7 @@
         },
         "priceHalalas": 0,
         "calories": 320,
-        "image": ""
+        "image": "/images/illustrated-menu-23.webp"
       },
       {
         "id": "dish-10",
@@ -404,7 +404,7 @@
         },
         "priceHalalas": 0,
         "calories": 420,
-        "image": ""
+        "image": "/images/illustrated-menu-26.webp"
       },
       {
         "id": "dish-7",
@@ -446,7 +446,7 @@
         },
         "priceHalalas": 0,
         "calories": 550,
-        "image": ""
+        "image": "/images/illustrated-menu-29.webp"
       },
       {
         "id": "menu-30",
@@ -460,7 +460,7 @@
         },
         "priceHalalas": 0,
         "calories": 650,
-        "image": ""
+        "image": "/images/illustrated-menu-30.webp"
       },
       {
         "id": "menu-31",
@@ -474,7 +474,7 @@
         },
         "priceHalalas": 0,
         "calories": 480,
-        "image": ""
+        "image": "/images/illustrated-menu-31.webp"
       },
       {
         "id": "menu-32",
@@ -488,7 +488,7 @@
         },
         "priceHalalas": 0,
         "calories": 520,
-        "image": ""
+        "image": "/images/illustrated-menu-32.webp"
       }
     ]
   },
@@ -525,7 +525,7 @@
         },
         "priceHalalas": 0,
         "calories": 140,
-        "image": ""
+        "image": "/images/illustrated-menu-34.webp"
       },
       {
         "id": "menu-35",
@@ -539,7 +539,7 @@
         },
         "priceHalalas": 0,
         "calories": 190,
-        "image": ""
+        "image": "/images/illustrated-menu-35.webp"
       },
       {
         "id": "menu-36",
@@ -553,7 +553,7 @@
         },
         "priceHalalas": 0,
         "calories": 180,
-        "image": ""
+        "image": "/images/illustrated-menu-36.webp"
       },
       {
         "id": "menu-37",
@@ -567,7 +567,7 @@
         },
         "priceHalalas": 0,
         "calories": 160,
-        "image": ""
+        "image": "/images/illustrated-menu-37.webp"
       },
       {
         "id": "menu-38",
@@ -581,7 +581,7 @@
         },
         "priceHalalas": 0,
         "calories": 150,
-        "image": ""
+        "image": "/images/illustrated-menu-38.webp"
       },
       {
         "id": "menu-39",
@@ -595,7 +595,7 @@
         },
         "priceHalalas": 0,
         "calories": 100,
-        "image": ""
+        "image": "/images/illustrated-menu-39.webp"
       },
       {
         "id": "menu-40",
@@ -609,7 +609,7 @@
         },
         "priceHalalas": 0,
         "calories": 160,
-        "image": ""
+        "image": "/images/illustrated-menu-40.webp"
       },
       {
         "id": "menu-41",
@@ -623,7 +623,7 @@
         },
         "priceHalalas": 0,
         "calories": 140,
-        "image": ""
+        "image": "/images/illustrated-menu-41.webp"
       },
       {
         "id": "menu-42",
@@ -637,7 +637,7 @@
         },
         "priceHalalas": 0,
         "calories": 140,
-        "image": ""
+        "image": "/images/illustrated-menu-42.webp"
       },
       {
         "id": "dish-40",
@@ -679,7 +679,7 @@
         },
         "priceHalalas": 0,
         "calories": 0,
-        "image": ""
+        "image": "/images/illustrated-menu-45.webp"
       }
     ]
   }
